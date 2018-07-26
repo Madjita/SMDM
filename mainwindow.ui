@@ -1,0 +1,2126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1022</width>
+    <height>777</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>SMDM</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QStackedWidget" name="stackedWidget_Start">
+      <widget class="QWidget" name="page_4">
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Реле пульта ТП-СМДМ</string>
+          </property>
+          <layout class="QFormLayout" name="formLayout">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>Реле &quot;A&quot;</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_5">
+              <item row="2" column="0">
+               <widget class="QPushButton" name="pbK13">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QPushButton" name="pbK11">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="pbK12">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QPushButton" name="pbK14">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QPushButton" name="pbK21">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QPushButton" name="pbK22">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="0">
+               <widget class="QPushButton" name="pbK23">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="12" column="0">
+               <widget class="QPushButton" name="pbK24">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="0">
+               <widget class="QPushButton" name="pbK25">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QPushButton" name="pbK15">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QPushButton" name="pbK16">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QPushButton" name="pbK17">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QPushButton" name="pbK18">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string notr="true"/>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QPushButton" name="pbK19">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string notr="true"/>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="17" column="0">
+               <widget class="QPushButton" name="pbK29">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="14" column="0">
+               <widget class="QPushButton" name="pbK26">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="16" column="0">
+               <widget class="QPushButton" name="pbK28">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="19" column="0">
+               <widget class="QPushButton" name="pbK210">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="15" column="0">
+               <widget class="QPushButton" name="pbK27">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="18" column="0">
+               <widget class="QPushButton" name="pbK110">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string notr="true"/>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>1</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>2</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>3</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>4</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLabel" name="label_5">
+                <property name="text">
+                 <string>5</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>6</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>7</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLabel" name="label_8">
+                <property name="text">
+                 <string>8</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLabel" name="label_9">
+                <property name="text">
+                 <string>9</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="QLabel" name="label_10">
+                <property name="text">
+                 <string>10</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="1">
+               <widget class="QLabel" name="label_11">
+                <property name="text">
+                 <string>11</string>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="1">
+               <widget class="QLabel" name="label_12">
+                <property name="text">
+                 <string>12</string>
+                </property>
+               </widget>
+              </item>
+              <item row="12" column="1">
+               <widget class="QLabel" name="label_13">
+                <property name="text">
+                 <string>13</string>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="1">
+               <widget class="QLabel" name="label_14">
+                <property name="text">
+                 <string>14</string>
+                </property>
+               </widget>
+              </item>
+              <item row="14" column="1">
+               <widget class="QLabel" name="label_15">
+                <property name="text">
+                 <string>15</string>
+                </property>
+               </widget>
+              </item>
+              <item row="15" column="1">
+               <widget class="QLabel" name="label_16">
+                <property name="text">
+                 <string>16</string>
+                </property>
+               </widget>
+              </item>
+              <item row="16" column="1">
+               <widget class="QLabel" name="label_17">
+                <property name="text">
+                 <string>17</string>
+                </property>
+               </widget>
+              </item>
+              <item row="17" column="1">
+               <widget class="QLabel" name="label_18">
+                <property name="text">
+                 <string>18</string>
+                </property>
+               </widget>
+              </item>
+              <item row="18" column="1">
+               <widget class="QLabel" name="label_19">
+                <property name="text">
+                 <string>ПР</string>
+                </property>
+               </widget>
+              </item>
+              <item row="19" column="1">
+               <widget class="QLabel" name="label_20">
+                <property name="text">
+                 <string>ПР2</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>Реле &quot;B&quot;</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_6">
+              <item row="6" column="0">
+               <widget class="QPushButton" name="K37">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QPushButton" name="K38">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string notr="true"/>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QPushButton" name="K31">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>true</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QPushButton" name="K39">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string notr="true"/>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QPushButton" name="K41">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QPushButton" name="K42">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="0">
+               <widget class="QPushButton" name="K43">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QPushButton" name="K34">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QPushButton" name="K33">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="K32">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QPushButton" name="K35">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QPushButton" name="K36">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="15" column="0">
+               <widget class="QPushButton" name="K47">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="19" column="0">
+               <widget class="QPushButton" name="K410">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="16" column="0">
+               <widget class="QPushButton" name="K48">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="18" column="0">
+               <widget class="QPushButton" name="K310">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>17</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string notr="true"/>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="0">
+               <widget class="QPushButton" name="K45">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="17" column="0">
+               <widget class="QPushButton" name="K49">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="14" column="0">
+               <widget class="QPushButton" name="K46">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="12" column="0">
+               <widget class="QPushButton" name="K44">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::PreventContextMenu</enum>
+                </property>
+                <property name="toolTipDuration">
+                 <number>0</number>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>15</width>
+                  <height>15</height>
+                 </size>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLabel" name="label_21">
+                <property name="text">
+                 <string>1</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLabel" name="label_22">
+                <property name="text">
+                 <string>2</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLabel" name="label_23">
+                <property name="text">
+                 <string>3</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLabel" name="label_24">
+                <property name="text">
+                 <string>4</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLabel" name="label_25">
+                <property name="text">
+                 <string>5</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLabel" name="label_26">
+                <property name="text">
+                 <string>6</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLabel" name="label_27">
+                <property name="text">
+                 <string>7</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLabel" name="label_28">
+                <property name="text">
+                 <string>8</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLabel" name="label_29">
+                <property name="text">
+                 <string>9</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="QLabel" name="label_30">
+                <property name="text">
+                 <string>10</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="1">
+               <widget class="QLabel" name="label_31">
+                <property name="text">
+                 <string>11</string>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="1">
+               <widget class="QLabel" name="label_32">
+                <property name="text">
+                 <string>12</string>
+                </property>
+               </widget>
+              </item>
+              <item row="12" column="1">
+               <widget class="QLabel" name="label_33">
+                <property name="text">
+                 <string>13</string>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="1">
+               <widget class="QLabel" name="label_34">
+                <property name="text">
+                 <string>14</string>
+                </property>
+               </widget>
+              </item>
+              <item row="14" column="1">
+               <widget class="QLabel" name="label_35">
+                <property name="text">
+                 <string>15</string>
+                </property>
+               </widget>
+              </item>
+              <item row="15" column="1">
+               <widget class="QLabel" name="label_36">
+                <property name="text">
+                 <string>16</string>
+                </property>
+               </widget>
+              </item>
+              <item row="16" column="1">
+               <widget class="QLabel" name="label_37">
+                <property name="text">
+                 <string>17</string>
+                </property>
+               </widget>
+              </item>
+              <item row="17" column="1">
+               <widget class="QLabel" name="label_38">
+                <property name="text">
+                 <string>18</string>
+                </property>
+               </widget>
+              </item>
+              <item row="18" column="1">
+               <widget class="QLabel" name="label_39">
+                <property name="text">
+                 <string>ПР</string>
+                </property>
+               </widget>
+              </item>
+              <item row="19" column="1">
+               <widget class="QLabel" name="label_40">
+                <property name="text">
+                 <string>ПР2</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QStackedWidget" name="stackedWidget">
+          <property name="minimumSize">
+           <size>
+            <width>782</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="page">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QTabWidget" name="tabWidget">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="currentIndex">
+               <number>-1</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="view">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="acceptDrops">
+               <bool>false</bool>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_2">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="2">
+               <layout class="QVBoxLayout" name="verticalLayout_3">
+                <item>
+                 <widget class="QGroupBox" name="GroupBox_PutProverka">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="title">
+                   <string>Проверка</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="flat">
+                   <bool>false</bool>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_3">
+                   <item>
+                    <widget class="QTextEdit" name="textEdit_PutProverka"/>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="1">
+               <layout class="QVBoxLayout" name="verticalLayout_4">
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetFixedSize</enum>
+                </property>
+                <item>
+                 <widget class="QGroupBox" name="GroupBox_PutBlock">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="title">
+                   <string>Выбрать блок</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="flat">
+                   <bool>false</bool>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <widget class="QTextEdit" name="textEdit_PutBlock"/>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QGroupBox" name="GroupBox_PutSerial">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="title">
+                   <string>Серия</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="flat">
+                   <bool>false</bool>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_2">
+                   <item>
+                    <widget class="QTextEdit" name="textEdit_PutSerial"/>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QGroupBox" name="GroupBox_PutEtap">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="title">
+                   <string>Этап</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="flat">
+                   <bool>false</bool>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_4">
+                   <item>
+                    <widget class="QTextEdit" name="textEdit_PutEtap"/>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="3">
+               <widget class="QPushButton" name="pushButton_GoNext">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="text">
+                 <string>Показать результаты</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QPushButton" name="pushButton_GoBack">
+                <property name="text">
+                 <string>Назад</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_3">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QPushButton" name="pushButton_GoBack_2">
+              <property name="text">
+               <string>Назад</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTabWidget" name="tabWidget_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="currentIndex">
+               <number>-1</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="view_2">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="acceptDrops">
+               <bool>false</bool>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_5"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1022</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Меню</string>
+    </property>
+    <addaction name="action_IP"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Регулировка</string>
+    </property>
+    <addaction name="action_Reg"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget_Ist">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>Источник питания</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_Micran">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>Микран</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_TP">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>Пульт ТП-СМДМ</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_3"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_Block">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>Блок</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_4"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_N9000">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>Анализатор</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_5"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_Out">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>Вывод</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_6"/>
+  </widget>
+  <action name="action_Reg">
+   <property name="text">
+    <string>Параметры регулировки пульта</string>
+   </property>
+  </action>
+  <action name="action_IP">
+   <property name="text">
+    <string>Настройка IP</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
