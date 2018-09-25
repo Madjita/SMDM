@@ -53,6 +53,7 @@ public:
     QVector<QVector<double>> ListPerestrouka;
     QVector<QVector<double>> Listy1;
     QVector<double> PerestroykaX;
+    char a[50];
 
     bool flag,flagEnd;
     bool  flag_6_proverki;
@@ -76,6 +77,7 @@ public:
     QDateTime date;
     QDateTime dateStart;
     QTextEdit* log_text_Block;
+
 
     QUdpSocket* p_udpSocketOut; // UDP soket для Переключения каналов реле Коммутатора СМ16-4
 
@@ -115,6 +117,10 @@ public:
     void SetIdLink(QSqlQueryModel* LinkGet);
     void SetEtap(QString etapGet);
 
+
+    bool writePort();
+
+
     void Rele_Kom_PRD(int in,int out);
     void Rele_Kom_PRM(int in,int out);
     void Rele_Kom_10MGH_PRD (int out);
@@ -138,6 +144,8 @@ public slots:
     void Work();
     void process_start();
 
+    bool readDatagram_p_udpSocketOut();
+
 signals:
     void Log(QString);
     void Log2(QString);
@@ -151,6 +159,9 @@ signals:
 
     void updateGraph();
     void updateGraphPerestrouyka();
+
+    void addBDZapros(QString);
+
 
 
 public:

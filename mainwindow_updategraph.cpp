@@ -226,8 +226,10 @@ void MainWindow::UpdateGraphPerestrouyka()
         {
             if(threadSM->y1.count() == 1)
             {
-                win_transferCoefficient->Graph->xAxis->setRange(-14,14);
-                win_transferCoefficient->Graph->yAxis->setRange(-14,14);
+                //win_transferCoefficient->Graph->xAxis->setRange(-14,14);
+                //win_transferCoefficient->Graph->yAxis->setRange(-14,14);
+                win_transferCoefficient->Graph->xAxis->setRange(-12,12);
+                win_transferCoefficient->Graph->yAxis->setRange(-30,14);
             }
 
 
@@ -259,8 +261,10 @@ void MainWindow::UpdateGraphPerestrouyka()
         {
             if(threadDM->y1.count() == 1)
             {
-                win_transferCoefficient->Graph->xAxis->setRange(-14,14);
-                win_transferCoefficient->Graph->yAxis->setRange(-14,14);
+//                win_transferCoefficient->Graph->xAxis->setRange(-14,14);
+//                win_transferCoefficient->Graph->yAxis->setRange(-14,14);
+                win_transferCoefficient->Graph->xAxis->setRange(-12,12);
+                win_transferCoefficient->Graph->yAxis->setRange(-30,14);
             }
 
             if( win_transferCoefficient->Graph->graphCount() <= 0)
@@ -285,8 +289,10 @@ void MainWindow::UpdateGraphPerestrouyka()
         {
             if(threadSMDM->y1.count() == 1)
             {
-                win_transferCoefficient->Graph->xAxis->setRange(-14,14);
-                win_transferCoefficient->Graph->yAxis->setRange(-14,14);
+//                win_transferCoefficient->Graph->xAxis->setRange(-14,14);
+//                win_transferCoefficient->Graph->yAxis->setRange(-14,14);
+                win_transferCoefficient->Graph->xAxis->setRange(-12,12);
+                win_transferCoefficient->Graph->yAxis->setRange(-30,14);
             }
 
             if( win_transferCoefficient->Graph->graphCount() <= 0)

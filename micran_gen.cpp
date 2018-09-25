@@ -8,7 +8,7 @@
 Micran_Gen::Micran_Gen()
     :connected(false)
 {
-   this->moveToThread(new QThread());
+    this->moveToThread(new QThread());
 
     connect(this->thread(),&QThread::started,this,&Micran_Gen::process_start);
 
@@ -19,7 +19,7 @@ Micran_Gen::Micran_Gen()
 
 void Micran_Gen::process_start()
 {
-      vi = NULL;
+    vi = 0;
 }
 
 
@@ -34,9 +34,8 @@ Micran_Gen::~Micran_Gen()
 //Функция разъединения с устройством
 void Micran_Gen::DisConnect()
 {
-    if(vi != NULL)
-        viClose (vi);
-
+    //if(vi != 0)
+    viClose (vi);
     viClose (defaultRM);
 }
 
@@ -45,6 +44,7 @@ void Micran_Gen::DisConnect()
 //Функция Соединения с уйстройством
 void Micran_Gen::Connect(QString ip)
 {
+    DisConnect();
 
     viStatus=viOpenDefaultRM(&defaultRM);                                       //Открытие сессии по умолчанию
 
@@ -62,7 +62,7 @@ void Micran_Gen::Connect(QString ip)
 
     emit Log2("Соединение с устройство Г7М-20: ");                                   //Отправка сигнала для лога генератора
 
-     qDebug () << "Micran_Gen";
+    qDebug () << "Micran_Gen";
     if(viStatus<VI_SUCCESS)                                                     // Проверка подключения к устройству
     {
 
@@ -73,22 +73,22 @@ void Micran_Gen::Connect(QString ip)
         case VI_ERROR_INV_OBJECT:
 
         {
-              qDebug () << "Micran_Gen  ERROR = VI_ERROR_INV_OBJECT";
+            qDebug () << "Micran_Gen  ERROR = VI_ERROR_INV_OBJECT";
             break;
         }
         case VI_ERROR_INV_RSRC_NAME:
         {
-              qDebug () << "Micran_Gen  ERROR = VI_ERROR_INV_RSRC_NAME";
+            qDebug () << "Micran_Gen  ERROR = VI_ERROR_INV_RSRC_NAME";
             break;
         }
         case VI_ERROR_RSRC_NFOUND:
         {
-             qDebug () << "Micran_Gen  ERROR = VI_ERROR_RSRC_NFOUND";
+            qDebug () << "Micran_Gen  ERROR = VI_ERROR_RSRC_NFOUND";
             break;
         }
         case VI_ERROR_TMO:
         {
-             qDebug () << "Micran_Gen  ERROR = VI_ERROR_TMO";
+            qDebug () << "Micran_Gen  ERROR = VI_ERROR_TMO";
             break;
         }
 
@@ -121,37 +121,37 @@ void Micran_Gen::Connect(QString ip)
 
 
 
- QString Micran_Gen::SetPowerAndFreq(int freq,QString mode_Hz_kHz_MHz_GHz,int pow,QString mode_V_DBM)
- {
-     QString error;
+QString Micran_Gen::SetPowerAndFreq(int freq,QString mode_Hz_kHz_MHz_GHz,int pow,QString mode_V_DBM)
+{
+    QString error;
 
-     write_SOURce_POWer_LEVel(pow,mode_V_DBM);
+    write_SOURce_POWer_LEVel(pow,mode_V_DBM);
 
-     error = query_ERRor();
+    error = query_ERRor();
 
-     if(error == "+0,\"No error\"\n")
-     {
-         write_SOURce_FREQuency(freq,mode_Hz_kHz_MHz_GHz);
+    if(error == "+0,\"No error\"\n")
+    {
+        write_SOURce_FREQuency(freq,mode_Hz_kHz_MHz_GHz);
 
-         error = query_ERRor();
+        error = query_ERRor();
 
-         if(error == "+0,\"No error\"\n")
-         {
-             write_INITiate();
+        if(error == "+0,\"No error\"\n")
+        {
+            write_INITiate();
 
-             write_OUTPut_STATe(true);
-         }
-         else
-         {
+            write_OUTPut_STATe(true);
+        }
+        else
+        {
             return error;
-         }
-     }
-     else
-     {
+        }
+    }
+    else
+    {
         return error;
-     }
+    }
 
- }
+}
 
 
 
@@ -163,20 +163,20 @@ void Micran_Gen::Connect(QString ip)
 //Эта команда очищает все структуры с информацией о состоянии прибора.
 void Micran_Gen::write_CLS()
 {
-    viPrintf(vi, ViString("*CLS\r\n"));
+    viPrintf(vi, const_cast<ViString>("*CLS\r\n"));
 }
 
 
 void Micran_Gen::write_INITiate()
 {
-    viPrintf(vi, ViString("INITiate:CONTinuous ON\r\n"));
+    viPrintf(vi, const_cast<ViString>("INITiate:CONTinuous ON\r\n"));
 }
 
 //Запрос регистра состояния стандартных событий (Standard Event Status Register).Возвращает значение регистра состояния стандартных событий в десятичной  системе счисления .
 QString Micran_Gen::query_ESR()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("*ESR?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("*ESR?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -201,7 +201,7 @@ QString Micran_Gen::query_ESR()
 QString Micran_Gen::query_IDN()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("*IDN?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("*IDN?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -219,7 +219,7 @@ QString Micran_Gen::query_IDN()
 QString Micran_Gen::query_OPC()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("*OPC?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("*OPC?\n"),const_cast<ViString>("%T"),buff);
 
     return qPrintable(buff);
 }
@@ -231,7 +231,7 @@ QString Micran_Gen::query_OPC()
 QString Micran_Gen::query_RST()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("*RST?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("*RST?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -250,7 +250,7 @@ QString Micran_Gen::query_RST()
 QString Micran_Gen::query_STB()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("*STB?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("*STB?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -269,7 +269,7 @@ QString Micran_Gen::query_STB()
 QString Micran_Gen::query_TRG()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("*TRG?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("*TRG?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -292,10 +292,10 @@ QString Micran_Gen::query_TRG()
 QString Micran_Gen::query_ERRor()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SYSTem:ERRor?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
-   return qPrintable(buff);
+    return qPrintable(buff);
 
 }
 
@@ -304,7 +304,7 @@ QString Micran_Gen::query_ERRor()
 QString Micran_Gen::query_VERSion()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SYSTem:VERSion?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:VERSion?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -330,7 +330,7 @@ QString Micran_Gen::query_VERSion()
 QString Micran_Gen::query_STATus_OPERation_ENABle()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("STATus:OPERation:ENABle?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("STATus:OPERation:ENABle?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -347,7 +347,7 @@ QString Micran_Gen::query_STATus_OPERation_ENABle()
 //Читает маску битов, отражающихся в регистр событий состояний.
 void Micran_Gen::write_STATus_OPERation_ENABle()
 {
-    viPrintf(vi, ViString("STATus:OPERation:ENABle\r\n"));
+    viPrintf(vi, const_cast<ViString>("STATus:OPERation:ENABle\r\n"));
 }
 
 /*Возвращает значение регистра событий.
@@ -357,7 +357,7 @@ void Micran_Gen::write_STATus_OPERation_ENABle()
 QString Micran_Gen::query_STATus_OPERation_EVENt()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("STATus:OPERation:EVENt?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("STATus:OPERation:EVENt?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -375,7 +375,7 @@ QString Micran_Gen::query_STATus_OPERation_EVENt()
 QString Micran_Gen::query_STATus_OPERation_CONDition()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("STATus:OPERation:CONDition?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("STATus:OPERation:CONDition?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -395,7 +395,7 @@ QString Micran_Gen::query_STATus_OPERation_CONDition()
 QString Micran_Gen::query_STATus_QUEStionable_ENABle()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("STATus:QUEStionable:ENABle?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("STATus:QUEStionable:ENABle?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -412,7 +412,7 @@ QString Micran_Gen::query_STATus_QUEStionable_ENABle()
 //Читает маску битов, отражающихся в регистр событий состояний.
 void Micran_Gen::write_STATus_QUEStionable_ENABle()
 {
-    viPrintf(vi, ViString("STATus:QUEStionable:ENABle\r\n"));
+    viPrintf(vi, const_cast<ViString>("STATus:QUEStionable:ENABle\r\n"));
 }
 
 /*Возвращает значение регистра событий.
@@ -422,7 +422,7 @@ void Micran_Gen::write_STATus_QUEStionable_ENABle()
 QString Micran_Gen::query_STATus_QUEStionable_EVENt()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("STATus:QUEStionable:EVENt?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("STATus:QUEStionable:EVENt?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -440,7 +440,7 @@ QString Micran_Gen::query_STATus_QUEStionable_EVENt()
 QString Micran_Gen::query_STATus_QUEStionable_CONDition()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("STATus:QUEStionable:CONDition?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("STATus:QUEStionable:CONDition?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -457,7 +457,7 @@ QString Micran_Gen::query_STATus_QUEStionable_CONDition()
 //Читает маску битов, отражающихся в регистр событий состояний.
 void Micran_Gen::write_STATus_PRESet()
 {
-    viPrintf(vi, ViString("STATus:PRESet\r\n"));
+    viPrintf(vi, const_cast<ViString>("STATus:PRESet\r\n"));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -467,17 +467,17 @@ void Micran_Gen::write_STATus_PRESet()
 //Команда OUTPut:[STATe] осуществляет управление выходом СВЧ. ON–включить выход СВЧ, OFF–выключить выход СВЧ.
 void Micran_Gen::write_OUTPut_STATe(bool state)
 {
-   QString  mode;
-   if(state)
-   {
-       mode = "ON";
-   }
-   else
-   {
+    QString  mode;
+    if(state)
+    {
+        mode = "ON";
+    }
+    else
+    {
         mode = "OFF";
-   }
+    }
 
-    viPrintf(vi, ViString("OUTPut:STATe %s\r\n"),qPrintable(mode));
+    viPrintf(vi, const_cast<ViString>("OUTPut:STATe %s\r\n"),qPrintable(mode));
 
 
 }
@@ -486,7 +486,7 @@ void Micran_Gen::write_OUTPut_STATe(bool state)
 QString Micran_Gen::query_OUTPut_STATe()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("OUTPut:STATe?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("OUTPut:STATe?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -506,14 +506,14 @@ QString Micran_Gen::query_OUTPut_STATe()
 //Команда установки Выбора единиц задания параметров мощности: W(ватты), DBM(дБм)
 void Micran_Gen::write_UNIT_POWer(QString DBMorW = "DMB")
 {
-    viPrintf(vi, ViString("UNIT:POWer %s\r\n"),qPrintable(DBMorW));
+    viPrintf(vi, const_cast<ViString>("UNIT:POWer %s\r\n"),qPrintable(DBMorW));
 }
 
 //Запрос на проверку установки Выбора единиц задания параметров мощности: W(ватты), DBM(дБм)
 QString Micran_Gen::query_UNIT_POWer()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("UNIT:POWer?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("UNIT:POWer?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -538,13 +538,13 @@ QString Micran_Gen::query_UNIT_POWer()
 //Команда установки частоты сигнала
 void Micran_Gen::write_SOURce_FREQuency(QString FREQuency_MAXimum_MINimum_DEFault = "DEFault")
 {
-    viPrintf(vi, ViString("SOURce:FREQuency %s\r\n"),qPrintable(FREQuency_MAXimum_MINimum_DEFault));
+    viPrintf(vi, const_cast<ViString>("SOURce:FREQuency %s\r\n"),qPrintable(FREQuency_MAXimum_MINimum_DEFault));
 }
 
 //Команда установки частоты сигнала
 void Micran_Gen::write_SOURce_FREQuency(int freq,QString mode_Hz_kHz_MHz_GHz  = "Hz")
 {
-    viPrintf(vi, ViString("SOURce:FREQuency %d %s\r\n"),freq,qPrintable(mode_Hz_kHz_MHz_GHz));
+    viPrintf(vi, const_cast<ViString>("SOURce:FREQuency %d %s\r\n"),freq,qPrintable(mode_Hz_kHz_MHz_GHz));
 }
 
 
@@ -552,7 +552,7 @@ void Micran_Gen::write_SOURce_FREQuency(int freq,QString mode_Hz_kHz_MHz_GHz  = 
 QString Micran_Gen::query_SOURce_FREQuency()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:FREQuency?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:FREQuency?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -569,14 +569,14 @@ QString Micran_Gen::query_SOURce_FREQuency()
 //Команда задаѐт режим генерации частоты:  CW|FIXed|SWEep|LIST.
 void Micran_Gen::write_SOURce_FREQuency_MODE(QString mode_CW_FIXed_SWEep_LIST = "FIXed")
 {
-    viPrintf(vi, ViString("SOURce:FREQuency:MODE %s\r\n"),qPrintable(mode_CW_FIXed_SWEep_LIST));
+    viPrintf(vi, const_cast<ViString>("SOURce:FREQuency:MODE %s\r\n"),qPrintable(mode_CW_FIXed_SWEep_LIST));
 }
 
 // Запрос на проверку режима генерации частоты
 QString Micran_Gen::query_SOURce_FREQuency_MODE()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:FREQuency:MODE?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:FREQuency:MODE?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -593,14 +593,14 @@ QString Micran_Gen::query_SOURce_FREQuency_MODE()
 //Команда задаѐт начальная частота
 void Micran_Gen::write_SOURce_FREQuency_STARt(int freq)
 {
-    viPrintf(vi, ViString("SOURce:FREQuency:STARt %d\r\n"),&freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:FREQuency:STARt %d\r\n"),&freq);
 }
 
 // Запрос на проверку установленной начальной частоты
 QString Micran_Gen::query_SOURce_FREQuency_STARt()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:FREQuency:STARt?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:FREQuency:STARt?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -617,14 +617,14 @@ QString Micran_Gen::query_SOURce_FREQuency_STARt()
 //Команда задаѐт конечная частота
 void Micran_Gen::write_SOURce_FREQuency_STOP(int freq)
 {
-    viPrintf(vi, ViString("SOURce:FREQuency:STOP %d\r\n"),&freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:FREQuency:STOP %d\r\n"),&freq);
 }
 
 // Запрос на проверку установленной конечной частоты
 QString Micran_Gen::query_SOURce_FREQuency_STOP()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:FREQuency:STOP?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:FREQuency:STOP?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -640,14 +640,14 @@ QString Micran_Gen::query_SOURce_FREQuency_STOP()
 //Команда задаѐт центральная частота
 void Micran_Gen::write_SOURce_FREQuency_CENTer(int freq)
 {
-    viPrintf(vi, ViString("SOURce:FREQuency:CENTer %d\r\n"),&freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:FREQuency:CENTer %d\r\n"),&freq);
 }
 
 // Запрос на проверку установленной центральной частоты
 QString Micran_Gen::query_SOURce_FREQuency_CENTer()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:FREQuency:CENTer?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:FREQuency:CENTer?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -663,14 +663,14 @@ QString Micran_Gen::query_SOURce_FREQuency_CENTer()
 //Команда задаѐт полосачастот
 void Micran_Gen::write_SOURce_FREQuency_SPAN(int freq)
 {
-    viPrintf(vi, ViString("SOURce:FREQuency:SPAN %d\r\n"),&freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:FREQuency:SPAN %d\r\n"),&freq);
 }
 
 // Запрос на проверку установленной полосачастот
 QString Micran_Gen::query_SOURce_FREQuency_SPAN()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:FREQuency:SPAN?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:FREQuency:SPAN?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -692,13 +692,13 @@ QString Micran_Gen::query_SOURce_FREQuency_SPAN()
 void Micran_Gen::write_SOURce_POWer_LEVel(int pow,QString mode_V_DBM)
 {
 
-    viPrintf(vi, ViString("SOURce:POWer:LEVel %d %s\r\n"),pow,qPrintable(mode_V_DBM));
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:LEVel %d %s\r\n"),pow,qPrintable(mode_V_DBM));
 }
 
 QString Micran_Gen::query_SOURce_POWer_LEVel()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:LEVel?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:LEVel?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -716,13 +716,13 @@ QString Micran_Gen::query_SOURce_POWer_LEVel()
 //Задание уровня мощности источника.
 void Micran_Gen::write_SOURce_POWer_LEVel_IMMediate_AMPLitude(int freq,QString mode_Hz_kHz_MHz_GHz = "Hz")
 {
-    viPrintf(vi, ViString("SOURce:POWer:LEVel:IMMediate:AMPLitude %d %T\r\n"),&freq,&mode_Hz_kHz_MHz_GHz);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:LEVel:IMMediate:AMPLitude %d %T\r\n"),&freq,&mode_Hz_kHz_MHz_GHz);
 }
 
 QString Micran_Gen::query_SOURce_POWer_LEVel_IMMediate_AMPLitude()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:LEVel:IMMediate:AMPLitude?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:LEVel:IMMediate:AMPLitude?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -739,13 +739,13 @@ QString Micran_Gen::query_SOURce_POWer_LEVel_IMMediate_AMPLitude()
 //Управление автоматической регулировкой мощности источника.
 void Micran_Gen::write_SOURce_POWer_ALC(bool mode = true)
 {
-    viPrintf(vi, ViString("SOURce:POWer:ALC %d\r\n"),&mode);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:ALC %d\r\n"),&mode);
 }
 
 QString Micran_Gen::query_SOURce_POWer_ALC()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:ALC?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:ALC?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -761,13 +761,13 @@ QString Micran_Gen::query_SOURce_POWer_ALC()
 
 void Micran_Gen::write_SOURce_POWer_MODE(QString mode_FIXed_SWEep_LIST = "FIXed")
 {
-    viPrintf(vi, ViString("SOURce:POWer:MODE %T\r\n"),&mode_FIXed_SWEep_LIST);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:MODE %T\r\n"),&mode_FIXed_SWEep_LIST);
 }
 
 QString Micran_Gen::query_SOURce_POWer_MODE()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:MODE?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:MODE?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -784,14 +784,14 @@ QString Micran_Gen::query_SOURce_POWer_MODE()
 //Команда задаѐт начальная мощности
 void Micran_Gen::write_SOURce_POWer_STARt(int freq)
 {
-    viPrintf(vi, ViString("SOURce:POWer:STARt %d\r\n"),freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:STARt %d\r\n"),freq);
 }
 
 // Запрос на проверку установленной начальной мощности
 QString Micran_Gen::query_SOURce_POWer_STARt()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:STARt?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:STARt?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -808,14 +808,14 @@ QString Micran_Gen::query_SOURce_POWer_STARt()
 //Команда задаѐт конечная мощности
 void Micran_Gen::write_SOURce_POWer_STOP(int freq)
 {
-    viPrintf(vi, ViString("SOURce:POWer:STOP %d\r\n"),freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:STOP %d\r\n"),freq);
 }
 
 // Запрос на проверку установленной конечной мощности
 QString Micran_Gen::query_SOURce_POWer_STOP()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:STOP?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:STOP?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -831,14 +831,14 @@ QString Micran_Gen::query_SOURce_POWer_STOP()
 //Команда задаѐт центральная мощность
 void Micran_Gen::write_SOURce_POWer_CENTer(int freq)
 {
-    viPrintf(vi, ViString("SOURce:POWer:CENTer %d\r\n"),freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:CENTer %d\r\n"),freq);
 }
 
 // Запрос на проверку установленной центральной мощности
 QString Micran_Gen::query_SOURce_POWer_CENTer()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:CENTer?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:CENTer?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -854,14 +854,14 @@ QString Micran_Gen::query_SOURce_POWer_CENTer()
 //Команда задаѐт полосамощности
 void Micran_Gen::write_SOURce_POWer_SPAN(int freq)
 {
-    viPrintf(vi, ViString("SOURce:POWer:SPAN %d\r\n"),freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:SPAN %d\r\n"),freq);
 }
 
 // Запрос на проверку установленной полосамощности
 QString Micran_Gen::query_SOURce_POWer_SPAN()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:SPAN?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:SPAN?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -878,14 +878,14 @@ QString Micran_Gen::query_SOURce_POWer_SPAN()
 //Команда Подсистема отвечает за управления аттенюатором.
 void Micran_Gen::write_SOURce_POWer_ATTenuation(int power)
 {
-    viPrintf(vi, ViString("SOURce:POWer:ATTenuation %d\r\n"),power);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:ATTenuation %d\r\n"),power);
 }
 
 // Запрос на проверку установленной Подсистема отвечает за управления аттенюатором.
 QString Micran_Gen::query_SOURce_POWer_ATTenuation()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:ATTenuation?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:ATTenuation?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -902,7 +902,7 @@ QString Micran_Gen::query_SOURce_POWer_ATTenuation()
 //Команда Подсистема отвечает за управления аттенюатором.
 void Micran_Gen::write_SOURce_POWer_ATTenuation_AUTO(bool mode)
 {
-    viPrintf(vi, ViString("SOURce:POWer:ATTenuation:AUTO %d\r\n"),mode);
+    viPrintf(vi, const_cast<ViString>("SOURce:POWer:ATTenuation:AUTO %d\r\n"),mode);
 }
 
 
@@ -910,7 +910,7 @@ void Micran_Gen::write_SOURce_POWer_ATTenuation_AUTO(bool mode)
 QString Micran_Gen::query_SOURce_POWer_ATTenuation_AUTO()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:POWer:ATTenuation:AUTO?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:POWer:ATTenuation:AUTO?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -927,7 +927,7 @@ QString Micran_Gen::query_SOURce_POWer_ATTenuation_AUTO()
 //Команда Подсистема отвечает за управления аттенюатором.
 void Micran_Gen::write_SOURce_SWEep_DWELl(int time)
 {
-    viPrintf(vi, ViString("SOURce:SWEep:DWELl %d\r\n"),time);
+    viPrintf(vi, const_cast<ViString>("SOURce:SWEep:DWELl %d\r\n"),time);
 }
 
 
@@ -935,7 +935,7 @@ void Micran_Gen::write_SOURce_SWEep_DWELl(int time)
 QString Micran_Gen::query_SOURce_SWEep_DWELl()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:SWEep:DWELl?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:SWEep:DWELl?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -952,7 +952,7 @@ QString Micran_Gen::query_SOURce_SWEep_DWELl()
 
 void Micran_Gen::write_SOURce_SWEep_POINts(int point)
 {
-    viPrintf(vi, ViString("SOURce:SWEep:POINts %d\r\n"),point);
+    viPrintf(vi, const_cast<ViString>("SOURce:SWEep:POINts %d\r\n"),point);
 }
 
 
@@ -960,7 +960,7 @@ void Micran_Gen::write_SOURce_SWEep_POINts(int point)
 QString Micran_Gen::query_SOURce_SWEep_POINts()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:SWEep:POINts?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:SWEep:POINts?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -979,14 +979,14 @@ QString Micran_Gen::query_SOURce_SWEep_POINts()
 
 void Micran_Gen::write_SOURce_SWEep_STEP(int step)
 {
-    viPrintf(vi, ViString("SOURce:SWEep:STEP %d %s\r\n"),step);
+    viPrintf(vi, const_cast<ViString>("SOURce:SWEep:STEP %d %s\r\n"),step);
 }
 
 
 QString Micran_Gen::query_SOURce_SWEep_STEP()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:SWEep:STEP?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:SWEep:STEP?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -1004,14 +1004,14 @@ QString Micran_Gen::query_SOURce_SWEep_STEP()
 
 void Micran_Gen::write_SOURce_LIST_DWELl(int time,QString mode = "")
 {
-    viPrintf(vi, ViString("SOURce:LIST:DWELl %d %s\r\n"),time,qPrintable(mode));
+    viPrintf(vi, const_cast<ViString>("SOURce:LIST:DWELl %d %s\r\n"),time,qPrintable(mode));
 }
 
 
 QString Micran_Gen::query_SOURce_LIST_DWELl()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:LIST:DWELl?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:LIST:DWELl?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -1028,14 +1028,14 @@ QString Micran_Gen::query_SOURce_LIST_DWELl()
 
 void Micran_Gen::write_SOURce_LIST_FREQuency(int freq)
 {
-    viPrintf(vi, ViString("SOURce:LIST:FREQuency %d \r\n"),freq);
+    viPrintf(vi, const_cast<ViString>("SOURce:LIST:FREQuency %d \r\n"),freq);
 }
 
 
 QString Micran_Gen::query_SOURce_LIST_FREQuency()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SOURce:LIST:FREQuency?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SOURce:LIST:FREQuency?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 

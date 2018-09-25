@@ -2058,3 +2058,8 @@ void MainWindow::slot_CreateWord()
 
 }
 
+void MainWindow::addBD(QString data)
+{
+    BD->zaprosVoid(data);
+}
+

@@ -8,17 +8,21 @@
 
 #include <QThread>
 
+#include <bdata.h>
+
 class Log : public QObject
 {
     Q_OBJECT
 public:
-    explicit Log(QObject *parent = 0);
+    explicit Log(QObject *parent = nullptr);
 
     QDateTime DataStart;
-    QSqlQueryModel* SQL;
+    BData* BD;
 signals:
 
 public slots:
+    void setBD(BData* _BD);
+
     void log_wr_message(QString msg);       // Функция Лог приложения
     void log_wr_message_Ist(QString msg);   // Функция Лог Источника питания
     void log_wr_message_Micran(QString msg);   // Функция Лог Микрана (генератора)

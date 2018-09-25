@@ -245,8 +245,7 @@ bool TP_SMDM::ReleA(int A)
 
 
 
-
-    if(A>=0 && A<10)
+    if(A>=0 && A<=10)
     {
         generatorON(1); //включение  реле генератора К1
         A0[0]=1;
@@ -304,11 +303,11 @@ bool TP_SMDM::ReleA(int A)
                 a[i]=0;
                 list_k1.append("0");
             }
+
             if(i==9)
             {
                 a[i]=1;
-                list_k1.append("1");
-
+                list_k1.replace(i,"1");
             }
         }
     }
@@ -332,7 +331,7 @@ bool TP_SMDM::ReleA(int A)
     // udpsocket=new QUdpSocket(); //соккет на включение портов реле К1 в пульте (точне A1-A9 выход)
     //  udpsocket2=new QUdpSocket(); //соккет на включение портов реле К2 в пульте (точне A10-A18 выход)
 
-    if(A>=0&&A<10)
+    if(A>=0&&A<=10)
     {
 
         rele_portON(list_k1,1); //включение портов К1
@@ -340,6 +339,7 @@ bool TP_SMDM::ReleA(int A)
         zaprosSOST_rele(1);
 
         flag = readDatagramK1();
+
 
         if(A==0 && flag == true)
         {
@@ -392,6 +392,11 @@ bool TP_SMDM::ReleA(int A)
 
     }
 
+
+    if(flag == false)
+        ReleA(A);
+
+
     return flag;
 }
 
@@ -405,7 +410,7 @@ bool TP_SMDM::ReleB(int B)
     char b[10];
 
 
-    if(B>=0 && B<10)
+    if(B>=0 && B<=10)
     {
         analizatorON(1); //включение  реле генератора К3
 
@@ -464,7 +469,7 @@ bool TP_SMDM::ReleB(int B)
             if(i==9)
             {
                 a[i]=1;
-                list_k3.append("1");
+                list_k3.replace(i,"1");
             }
         }
     }
@@ -472,7 +477,7 @@ bool TP_SMDM::ReleB(int B)
     qDebug () << "B = " << B << " list_k3 = " << list_k3 ;
 
 
-    if(B>=0&&B<10)
+    if(B>=0&&B<=10)
     {
         rele_portON(list_k3,3); //включение портов К3
 
@@ -532,6 +537,9 @@ bool TP_SMDM::ReleB(int B)
 
 
     }
+
+    if(flag == false)
+        ReleB(B);
 
     return flag;
     //////////////////////////////////////////////////////////////////////////
@@ -626,7 +634,7 @@ bool TP_SMDM::ReleB(char a[10], int rele)
 bool TP_SMDM::readDatagramK1()
 {
     bool flag = false;
-    Sleep(100);
+    this->thread()->msleep(200);
 
     while(udpsocket1->hasPendingDatagrams())
     {
@@ -647,7 +655,7 @@ bool TP_SMDM::readDatagramK1()
 bool TP_SMDM::readDatagramK2()
 {
     bool flag = false;
-    Sleep(100);
+    this->thread()->msleep(200);
 
     while(udpsocket3->hasPendingDatagrams())
     {
@@ -668,7 +676,7 @@ bool TP_SMDM::readDatagramK2()
 bool TP_SMDM::readDatagramK3()
 {
     bool flag = false;
-    Sleep(100);
+    this->thread()->msleep(200);
 
     while(udpsocket4->hasPendingDatagrams())
     {
@@ -689,7 +697,7 @@ bool TP_SMDM::readDatagramK3()
 bool TP_SMDM::readDatagramK4()
 {
     bool flag = false;
-    Sleep(100);
+    this->thread()->msleep(200);
     while(udpsocket7->hasPendingDatagrams())
     {
         QByteArray datagram;
@@ -1270,30 +1278,30 @@ void TP_SMDM::generatorON(int rele)
 
 void TP_SMDM::analizatorON(int rele)
 {
-  char a[5];
- if(rele==1)
- {
-     a[3]=0;
-     a[4]=1;
- }
+    char a[5];
+    if(rele==1)
+    {
+        a[3]=0;
+        a[4]=1;
+    }
 
- else if(rele==2)
- {
-     a[3]=1;
-     a[4]=0;
- }
+    else if(rele==2)
+    {
+        a[3]=1;
+        a[4]=0;
+    }
 
- else
- {
-     a[3]=0;
-     a[4]=0;
- }
+    else
+    {
+        a[3]=0;
+        a[4]=0;
+    }
 
- a[0]=noup[0];
- a[1]=noup[1];
- a[2]=noup[2];
+    a[0]=noup[0];
+    a[1]=noup[1];
+    a[2]=noup[2];
 
- udpsocket65520->writeDatagram(a,5,QHostAddress(IPaddrPLATA),65520);
+    udpsocket65520->writeDatagram(a,5,QHostAddress(IPaddrPLATA),65520);
 }
 
 void TP_SMDM::StratRegyl()
@@ -1492,6 +1500,10 @@ void TP_SMDM::StratRegyl()
     ReleB(22);
 
 
+    QMessageBox msgBox;
+    msgBox.setText("Конец регулировки пульта.");
+    msgBox.exec();
+
 
     Log("Конец Колибровки пульта.\n");
     Log2("Конец Колибровки пульта.\n");
@@ -1591,7 +1603,7 @@ void TP_SMDM::AchH()
         }
         else
         {
-            Sleep(100);
+            this->thread()->msleep(200);
         }
 
         viPrintf(N9000->vi, "CALC:MARK:MAX\n");
@@ -1753,7 +1765,7 @@ void TP_SMDM::AchHRegyl()
         }
         else
         {
-            Sleep(100);
+            this->thread()->msleep(200);
         }
 
         viPrintf(N9000->vi, "CALC:MARK:MAX\n");
@@ -1766,7 +1778,7 @@ void TP_SMDM::AchHRegyl()
 
         x.append(dResultX/pow(10,6));
 
-      //  dResultY -=GnPower;
+        //  dResultY -=GnPower;
 
         y.append(dResultY);
 
@@ -1867,10 +1879,10 @@ void TP_SMDM::END()
 
     p_udpSocketOut->close(); // UDP soket для Переключения каналов реле Коммутатора СМ16-4
 
-//    udpsocket->close(); // UDP soket Для Переключения реле Пульта "A1"выход по "A9"
-//    udpsocket2->close(); // UDP soket Для Переключения реле Пульта "A10"выхода по "A18"
-//    udpsocket5->close(); // UDP soket Для Переключения реле Пульта "В1"выход до B"9"
-//    udpsocket6->close(); // UDP soket Для Переключения реле Пульта B"10" выхода до B"18"
-//    p_udpSocketOut->close(); // UDP soket для Переключения каналов реле Коммутатора СМ16-4
+    //    udpsocket->close(); // UDP soket Для Переключения реле Пульта "A1"выход по "A9"
+    //    udpsocket2->close(); // UDP soket Для Переключения реле Пульта "A10"выхода по "A18"
+    //    udpsocket5->close(); // UDP soket Для Переключения реле Пульта "В1"выход до B"9"
+    //    udpsocket6->close(); // UDP soket Для Переключения реле Пульта B"10" выхода до B"18"
+    //    p_udpSocketOut->close(); // UDP soket для Переключения каналов реле Коммутатора СМ16-4
 
 }

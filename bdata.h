@@ -32,6 +32,7 @@ public:
     //Запрос к базе
     QSqlQuery* query;
     QSqlQueryModel* queryModel;
+    QSqlQueryModel* queryModelVoid;
 
 
 public slots:
@@ -41,6 +42,9 @@ public slots:
     QSqlQuery zapros(QString);
 
     QSqlQueryModel* zaprosQueryModel(QString);
+
+    void zaprosVoid(QString);
+
     void work();
 
     void StartTimer();
@@ -48,6 +52,10 @@ public slots:
     void process_start();
 
     void addLink();
+
+    //Обнулить инкримент таблицы
+    void updateIncrementTable(QString nameTable);
+    QStringList allTable();
 
 
 

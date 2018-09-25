@@ -2048,6 +2048,8 @@ void thread_SM::END()
 
 
     emit end();
+
+
 }
 
 void thread_SM::StratRegyl()

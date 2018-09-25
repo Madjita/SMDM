@@ -34,7 +34,7 @@
       <set>Qt::ImhNone</set>
      </property>
      <property name="text">
-      <string>10.12.1.73</string>
+      <string>10.12.1.66</string>
      </property>
      <property name="maxLength">
       <number>15</number>
@@ -88,7 +88,7 @@
    <item row="2" column="2">
     <widget class="QLineEdit" name="lineEdit_6">
      <property name="text">
-      <string>10.12.1.78</string>
+      <string>10.12.0.90</string>
      </property>
      <property name="maxLength">
       <number>15</number>
@@ -136,7 +136,7 @@
    <item row="4" column="2">
     <widget class="QLineEdit" name="lineEdit_8">
      <property name="text">
-      <string>192.168.1.100</string>
+      <string>192.168.1.233</string>
      </property>
      <property name="maxLength">
       <number>15</number>

@@ -35,7 +35,7 @@ void N9000A::process_start()
 void N9000A::Connect(QString ip)
 {
 
-    //DisConnect();
+    DisConnect();
 
     viStatus=viOpenDefaultRM(&defaultRM);
 
@@ -68,11 +68,11 @@ void N9000A::Connect(QString ip)
 
         emit Log2("[Соединение установленно(ОК)] \n");
 
-       // viPrintf(vi, ViString("*CLS"));
-       // viPrintf(vi, ViString("*RST"));
-        viPrintf(vi, ViString("SYSTem:PRESet"));
+       // viPrintf(vi, const_cast<ViString>("*CLS"));
+       // viPrintf(vi, const_cast<ViString>("*RST"));
+        viPrintf(vi, const_cast<ViString>("SYSTem:PRESet"));
 
-        viPrintf(vi, ViString("CALibration:AUTO OFF"));
+        viPrintf(vi, const_cast<ViString>("CALibration:AUTO OFF"));
 
         emit Log("Сброс настроек: Поумолчанию \n");
 
@@ -85,7 +85,7 @@ void N9000A::Connect(QString ip)
 QString N9000A::query_ERRor()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SYSTem:ERRor?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
     return qPrintable(buff);
@@ -96,7 +96,7 @@ QString N9000A::query_ERRor()
 QString N9000A::query_IDN()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("*IDN?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("*IDN?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -115,7 +115,7 @@ QString N9000A::query_IDN()
 QString N9000A::query_AVER_STAT()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("AVER:STAT?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("AVER:STAT?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -132,19 +132,19 @@ QString N9000A::query_AVER_STAT()
 
 void N9000A::write_AVER_STAT(bool mod)
 {
-    viPrintf(vi, ViString("AVER:STAT %d\n"),mod);
+    viPrintf(vi, const_cast<ViString>("AVER:STAT %d\n"),mod);
 }
 
 void N9000A::write_CALC_MARK_MODE(QString mod) //NORM
 {
-    viPrintf(vi, ViString("CALC:MARK:MODE %s\n"),qPrintable(mod));
+    viPrintf(vi, const_cast<ViString>("CALC:MARK:MODE %s\n"),qPrintable(mod));
 }
 
 //Команда на проверку ошибок в запросе
 QString N9000A::query_CALC_MARK_MODE()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("CALC:MARK:MODE?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("CALC:MARK:MODE?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -160,14 +160,14 @@ QString N9000A::query_CALC_MARK_MODE()
 
 void N9000A::write_DISP_WIND_TRAC_Y_RLEV(int power) //NORM
 {
-    viPrintf(vi, ViString("DISP:WIND:TRAC:Y:RLEV %d dBm\n"),power);
+    viPrintf(vi, const_cast<ViString>("DISP:WIND:TRAC:Y:RLEV %d dBm\n"),power);
 }
 
 //Команда на проверку ошибок в запросе
 QString N9000A::query_DISP_WIND_TRAC_Y_RLEV()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("DISP:WIND:TRAC:Y:RLEV?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("DISP:WIND:TRAC:Y:RLEV?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -185,13 +185,13 @@ QString N9000A::query_DISP_WIND_TRAC_Y_RLEV()
 
 void N9000A::write_FREQuency_STARt(int freq, QString mode = "MHz")
 {
-    viPrintf(vi, ViString("FREQuency:STARt %d %s\n"),freq,qPrintable(mode));
+    viPrintf(vi, const_cast<ViString>("FREQuency:STARt %d %s\n"),freq,qPrintable(mode));
 }
 
 QString N9000A::query_FREQuency_STARt()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("FREQuency:STARt?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("FREQuency:STARt?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -207,13 +207,13 @@ QString N9000A::query_FREQuency_STARt()
 
 void N9000A::write_FREQuency_STOP(int freq, QString mode = "MHz")
 {
-    viPrintf(vi, ViString("FREQuency:STOP %d %s\n"),freq,qPrintable(mode));
+    viPrintf(vi, const_cast<ViString>("FREQuency:STOP %d %s\n"),freq,qPrintable(mode));
 }
 
 QString N9000A::query_FREQuency_STOP()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("FREQuency:STOP?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("FREQuency:STOP?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -231,7 +231,7 @@ QString N9000A::query_FREQuency_STOP()
 QString N9000A::query_CALC_MARK_Y()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("CALC:MARK:Y?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("CALC:MARK:Y?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -248,7 +248,7 @@ QString N9000A::query_CALC_MARK_Y()
 QString N9000A::query_CALC_MARK_X()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("CALC:MARK:X?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("CALC:MARK:X?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 

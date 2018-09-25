@@ -1535,6 +1535,8 @@ void thread_DM::END()
     */
 
     emit end();
+
+
 }
 
 void thread_DM::StratRegyl()

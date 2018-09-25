@@ -32,6 +32,7 @@ public slots:
     void PutRegyl();
 
 
+
 private slots:
     void on_pushButton_StartRegylirovka_clicked();
 

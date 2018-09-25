@@ -4,14 +4,17 @@
 
 Log::Log(QObject *parent) : QObject(parent)
 {
-    SQL = new QSqlQueryModel();
+    //SQL = new QSqlQueryModel();
 
 //    this->moveToThread(new QThread());
-
 //    connect(this->thread(),&QThread::started,this,&Log::process_start);
-
 //    this->thread()->start();
 
+}
+
+void Log::setBD(BData *_BD)
+{
+    BD = _BD;
 }
 
 void Log::process_start()
@@ -27,22 +30,21 @@ void Log::SetDataStart(QDateTime data)
 // Функция Лог приложения
 void Log::log_wr_message(QString msg)
 {
-
-    SQL->setQuery("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Вывод'");
+    BD->zaprosVoid("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Вывод'");
 
 }
 
 // Функция Лог Источника питания
 void Log::log_wr_message_Ist(QString msg)
 {
-    SQL->setQuery("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Источник питания'");
+    BD->zaprosVoid("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Источник питания'");
 }
 
 // Функция Лог Генератора
 void Log::log_wr_message_Micran(QString msg)
 {
 
-    SQL->setQuery("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Микран'");
+    BD->zaprosVoid("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Микран'");
 }
 
 
@@ -52,7 +54,7 @@ void Log::log_wr_message_TP(QString msg)
 
 
 
-    SQL->setQuery("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Пульт ТП-СМДМ'");
+    BD->zaprosVoid("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Пульт ТП-СМДМ'");
 
 
 }
@@ -61,7 +63,7 @@ void Log::log_wr_message_TP(QString msg)
 void Log::log_wr_message_Block(QString msg)
 {
 
-    SQL->setQuery("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Блок'");
+    BD->zaprosVoid("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Блок'");
 
 }
 
@@ -69,7 +71,7 @@ void Log::log_wr_message_Block(QString msg)
 void Log::log_wr_message_N9000(QString msg)
 {
 
-    SQL->setQuery("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Анализатор'");
+    BD->zaprosVoid("UPDATE Log SET [Data]='"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"',[Text]='"+msg+"' WHERE DataStart ='"+DataStart.toString("dd.MM.yyyy  hh:mm:ss")+"' AND BlockName='Анализатор'");
 
 
 }

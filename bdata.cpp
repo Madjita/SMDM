@@ -11,6 +11,27 @@ BData::BData()
 
 }
 
+void BData::updateIncrementTable(QString nameTable)
+{
+    queryModel->setQuery("UPDATE sqlite_sequence set seq=0 WHERE Name='"+nameTable+"'");
+}
+
+QStringList BData::allTable()
+{
+    QStringList listTable;
+
+
+    queryModel->setQuery("select * from sqlite_master where type ='table'");
+
+    for(int i=0; queryModel->rowCount();i++)
+    {
+        listTable << queryModel->data(queryModel->index(i,1), Qt::EditRole).toString();
+    }
+
+    return listTable;
+
+}
+//************************************************
 
 QString BData::Connect_BD()
 {
@@ -38,15 +59,16 @@ QString BData::Connect_BD()
     else
     {
          query = new QSqlQuery(db);
+         queryModel = nullptr;
+         queryModelVoid = new QSqlQueryModel();
 
-            qDebug()<<"Ok";
+
+         qDebug()<<"База данных загружена [OK]. Рабочая папка:";
           Log("База данных загружена [OK]. Рабочая папка:\n");
           Log( db.databaseName()+"\n");
           Log("===================\n");
     }
 
-    QTime midnight(0,0,0);
-    qsrand(midnight.secsTo(QTime::currentTime()));
 
     timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(work()));
@@ -187,7 +209,7 @@ QString BData::create(QString name, QVector<QString> list)
 
 QSqlQuery BData::zapros(QString data)
 {
-    if(query == NULL)
+    if(query == nullptr)
     {
         query = new QSqlQuery(db);
     }
@@ -234,6 +256,10 @@ QSqlQueryModel* BData::zaprosQueryModel(QString data)
 
     queryModel->setQuery(data);
 
-
     return queryModel;
+}
+
+void BData::zaprosVoid(QString data)
+{
+    queryModelVoid->setQuery(data);
 }

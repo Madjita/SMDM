@@ -96,5 +96,5 @@ void Regylirovka::PutRegyl()
 
 void Regylirovka::on_pushButton_StartRegylirovka_clicked()
 {
-
+    this->close();
 }

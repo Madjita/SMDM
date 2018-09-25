@@ -35,7 +35,7 @@ void PowerSourse::process_start()
 
 void PowerSourse::Connect(QString ip)
 {
-   // DisConnect();
+    DisConnect();
 
     viStatus=viOpenDefaultRM(&defaultRM);
 
@@ -45,7 +45,7 @@ void PowerSourse::Connect(QString ip)
 
     viStatus=viOpen(defaultRM,  ViRsrc(qPrintable(str)), ViAccessMode(VI_NULL),ViUInt32(VI_NULL),&vi);  // Открытие сессии с устройством по заданному ip
 
-     Log2("Соединение с устройством ROHDE&SCHWARZ HMP2020: ");
+    emit Log2("Соединение с устройством ROHDE&SCHWARZ HMP2020: ");
 
     if(viStatus<VI_SUCCESS)
     {
@@ -77,7 +77,7 @@ void PowerSourse::Connect(QString ip)
 QString PowerSourse::query_ERRor()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("SYSTem:ERRor?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
 
 
    return qPrintable(buff);
@@ -87,20 +87,20 @@ QString PowerSourse::query_ERRor()
 
 void PowerSourse::write_VOLTage(int v)
 {
-    viPrintf(vi, ViString("VOLTage %d V\r\n"),v);
+    viPrintf(vi, const_cast<ViString>("VOLTage %d V\r\n"),v);
 }
 
 
 void PowerSourse::write_OUTPut(bool mod)
 {
-    viPrintf(vi, ViString("OUTPut %d\r\n"),mod);
+    viPrintf(vi, const_cast<ViString>("OUTPut %d\r\n"),mod);
 }
 
 
 QString PowerSourse::query_VOLTage()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("VOLTage?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("VOLTage?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -117,7 +117,7 @@ QString PowerSourse::query_VOLTage()
 QString PowerSourse::query_OUTPut()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("OUTPut?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("OUTPut?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -134,7 +134,7 @@ QString PowerSourse::query_OUTPut()
 QString PowerSourse::query_MEASure_CURRent()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("MEASure:CURRent?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("MEASure:CURRent?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 
@@ -151,7 +151,7 @@ QString PowerSourse::query_MEASure_CURRent()
 QString PowerSourse::query_MEASure_VOLTage()
 {
     char buff[1024] = "";
-    viQueryf(vi,ViString("MEASure:VOLTage?\n"),ViString("%T"),buff);
+    viQueryf(vi,const_cast<ViString>("MEASure:VOLTage?\n"),const_cast<ViString>("%T"),buff);
 
     QString error = query_ERRor();
 

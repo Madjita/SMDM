@@ -192,6 +192,7 @@ public:
 
 
 signals:
+    void work_threadSMDM();
 
     void startSM();
     void startDM();
@@ -214,7 +215,10 @@ signals:
     void Setlog_wr_message_N9000(QString msg);    // Функция Лог Анализатора
 
 
+
 public slots:
+
+   void addBD(QString data);
 
     void LoadResult();                      // Фукнция загрузки результатов
     void LoadTableResultat();               // Создание таблицы для результатов

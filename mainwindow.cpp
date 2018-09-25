@@ -45,10 +45,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     newLog = new Log();
+    newLog->setBD(BD);
 
     threadSM = new thread_SM(Micran1,N9000,HMP2020,TP,ui->view);
 
-    connect(threadSM,&thread_SM::SQL_add,BD,&BData::zaprosQueryModel);
+    connect(threadSM,&thread_SM::SQL_add,this,&MainWindow::addBD);
 
     threadSM->SQL_OneProverka = new QSqlQueryModel();
 
@@ -83,16 +84,16 @@ MainWindow::MainWindow(QWidget *parent) :
     threadSMDM = new thread_SMDM();
 
 
-    QObject::connect(this,&MainWindow::Setlog_wr_message,newLog,&Log::log_wr_message);//,Qt::DirectConnection);
-    QObject::connect(this,&MainWindow::Setlog_wr_message_Block,newLog,&Log::log_wr_message_Block);//,Qt::DirectConnection);
-    QObject::connect(this,&MainWindow::Setlog_wr_message_Ist,newLog,&Log::log_wr_message_Ist);//,Qt::DirectConnection);
-    QObject::connect(this,&MainWindow::Setlog_wr_message_Micran,newLog,&Log::log_wr_message_Micran);//,Qt::DirectConnection);
-    QObject::connect(this,&MainWindow::Setlog_wr_message_TP,newLog,&Log::log_wr_message_TP);//,Qt::DirectConnection);
-    QObject::connect(this,&MainWindow::Setlog_wr_message_N9000,newLog,&Log::log_wr_message_N9000);//,Qt::DirectConnection);
+    connect(this,&MainWindow::Setlog_wr_message,newLog,&Log::log_wr_message);//,Qt::DirectConnection);
+    connect(this,&MainWindow::Setlog_wr_message_Block,newLog,&Log::log_wr_message_Block);//,Qt::DirectConnection);
+    connect(this,&MainWindow::Setlog_wr_message_Ist,newLog,&Log::log_wr_message_Ist);//,Qt::DirectConnection);
+    connect(this,&MainWindow::Setlog_wr_message_Micran,newLog,&Log::log_wr_message_Micran);//,Qt::DirectConnection);
+    connect(this,&MainWindow::Setlog_wr_message_TP,newLog,&Log::log_wr_message_TP);//,Qt::DirectConnection);
+    connect(this,&MainWindow::Setlog_wr_message_N9000,newLog,&Log::log_wr_message_N9000);//,Qt::DirectConnection);
 
 
-    QObject::connect(ui->view,&QTableWidget::cellClicked,this,&MainWindow::SetTabProverki);
-    QObject::connect(Button_PDF,&QPushButton::clicked,this,&MainWindow::PDF);
+    connect(ui->view,&QTableWidget::cellClicked,this,&MainWindow::SetTabProverki);
+    connect(Button_PDF,&QPushButton::clicked,this,&MainWindow::PDF);
 
 
 
@@ -106,9 +107,6 @@ MainWindow::~MainWindow()
     threadSM->p_udpSocketOut->close();
 
     threadSM->thread()->terminate();
-
-
-
 
     delete ui;
 }
@@ -239,9 +237,6 @@ void MainWindow::CreateDevice()
     //Таймер для графиков
     fps =200;
 
-    QTime midnight(0,0,0);
-    qsrand(midnight.secsTo(QTime::currentTime()));
-
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(UpdateGraph()));
 
@@ -299,13 +294,16 @@ void MainWindow::CreateDevice()
 
 
     BD = new BData();
+    BD->Connect_BD();
+
+
 
     connect(BD,&BData::Log,this,&MainWindow::log_wr_message); // Qt::DirectConnection
 
 
-    connect(this,&MainWindow::Connect_BD,BD,&BData::Connect_BD);
+//    connect(this,&MainWindow::Connect_BD,BD,&BData::Connect_BD,Qt::DirectConnection);
 
-    emit Connect_BD();
+//    emit Connect_BD();
 
 
     qRegisterMetaType<QVector<int>>("QVector<int>");
@@ -442,10 +440,10 @@ void MainWindow::CreateTollBar()
     connect(EtapGroup_Regylirovka_RadioButton,SIGNAL(clicked(bool)), this, SLOT(LoadTable()));
 
     //Вывод меню настройки IP адресов
-    QObject::connect(ui->action_IP,&QAction::triggered, this,&MainWindow::Adresa_nastroika);
+    connect(ui->action_IP,&QAction::triggered, this,&MainWindow::Adresa_nastroika);
 
     // Меню регулировки
-    QObject::connect(ui->action_Reg, &QAction::triggered, this, &MainWindow::look_Regyl);
+    connect(ui->action_Reg, &QAction::triggered, this, &MainWindow::look_Regyl);
 
     //Connect Button_StartOpros
     connect(Button_StartOpros, SIGNAL(clicked()), this, SLOT(Proverka_StartOpros()));
@@ -494,11 +492,7 @@ void MainWindow::Kolibrovka()
     emit Connect_Micran(win_ipadres->getIP_Micran());
 
 
-
-
-
-
-   emit KolibrovkaSignal();
+    emit KolibrovkaSignal();
 }
 
 
@@ -523,6 +517,8 @@ void MainWindow::Proverka_StartOpros()
 
     Button_StartProverka->setDisabled(0); // Разрешить нажатие на кнопку старт
     Button_EndOpros->setDisabled(0); // Разрешить нажатие на кнопку Отключить
+
+
 
     /*if(HMP2020->viStatus < VI_SUCCESS || N9000->viStatus < VI_SUCCESS || Micran1->viStatus < VI_SUCCESS)
     {
@@ -637,7 +633,7 @@ void MainWindow::look_Regyl()
 
 void MainWindow::LoadFile()
 {
-    QObject::connect(win_Regylirovka->getQTextEditObject(),&QTextEdit::cursorPositionChanged, this,&MainWindow::PutRegyl,Qt::DirectConnection);
+    connect(win_Regylirovka->getQTextEditObject(),&QTextEdit::cursorPositionChanged, this,&MainWindow::PutRegyl,Qt::DirectConnection);
 
     QFile* file = new QFile("Regylirovka.txt");
 
@@ -720,10 +716,10 @@ void MainWindow::PutRegyl()
 {
 
 
-  win_Regylirovka->tableRegyl = tableRegyl;
-  win_Regylirovka->tableRegyl2 = tableRegyl2;
+    win_Regylirovka->tableRegyl = tableRegyl;
+    win_Regylirovka->tableRegyl2 = tableRegyl2;
 
-  win_Regylirovka->PutRegyl();
+    win_Regylirovka->PutRegyl();
 
 
 
@@ -843,7 +839,7 @@ void MainWindow::LoadTable()
 
     QPixmap R1_Gray(":/images/circle_gray.png");
 
-  //  QWidget *ProverkaList1 = new QWidget(); // окно проверки
+    //  QWidget *ProverkaList1 = new QWidget(); // окно проверки
     QWidget *ProverkaList2 = new QWidget(); // окно проверки
     QWidget *ProverkaList3 = new QWidget(); // окно проверки
     QWidget *ProverkaList4 = new QWidget(); // окно проверки
@@ -1010,7 +1006,7 @@ void MainWindow::CreateStartSeitingGraph()
     ProverkaList5 = new QWidget(); // окно проверки
 
 
-   // win_frequency->setupUi(ProverkaList3);
+    // win_frequency->setupUi(ProverkaList3);
     //win_transferCoefficient->setupUi(ProverkaList4);
 
     win_frequency->ProverkaGraph->xAxis->setLabel("Частота(МГц)");

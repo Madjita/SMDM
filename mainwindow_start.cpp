@@ -106,46 +106,46 @@ void MainWindow::Proverka_Start()
 
 
 
-       // QObject::connect(this,&MainWindow::startSM,threadSM,&thread_SM::Work);
+       // connect(this,&MainWindow::startSM,threadSM,&thread_SM::Work);
 
 
       //  threadSM->SetUi(win_power,win_frequency,win_transferCoefficient,win_switchingSignalSM);
 
 
-//        QObject::connect(threadSM, &thread_SM::updateGraph, this, &MainWindow::UpdateGraph);
+//        connect(threadSM, &thread_SM::updateGraph, this, &MainWindow::UpdateGraph);
 
 
-//         QObject::connect(threadSM, &thread_SM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
+//         connect(threadSM, &thread_SM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
 
 
 
-//        QObject::connect(threadSM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
+//        connect(threadSM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
 
 //        connect(threadSM,&thread_SM::end, this, &MainWindow::END);
 
-//        QObject::connect(threadSM,&thread_SM::Log,this,&MainWindow::log_wr_message_Block);
-//        QObject::connect(threadSM,&thread_SM::Log2,this,&MainWindow::log_wr_message_Block);
+//        connect(threadSM,&thread_SM::Log,this,&MainWindow::log_wr_message_Block);
+//        connect(threadSM,&thread_SM::Log2,this,&MainWindow::log_wr_message_Block);
 
-//        QObject::connect(threadSM,&thread_SM::StartFrequency,ui->tabWidget,&QTabWidget::setCurrentIndex);
-//        QObject::connect(threadSM,&thread_SM::StartPower,ui->tabWidget,&QTabWidget::setCurrentIndex);
-//        QObject::connect(threadSM,&thread_SM::StartPerestroyka,ui->tabWidget,&QTabWidget::setCurrentIndex);
-
-
-
-//        QObject::connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
-//        QObject::connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
-//        QObject::connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
-//        QObject::connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
-
-//        QObject::connect(threadSM,&thread_SM::LogClear,this,&MainWindow::log_wr_message_Block_claer);
-
-//        QObject::connect(threadSM,&thread_SM::CreateGraph,this,&MainWindow::CreateGraph2);
-
-//        QObject::connect(threadSM,&thread_SM::CreateGraphfrenq,this,&MainWindow::CreateGraphFrenq,Qt::QueuedConnection);
+//        connect(threadSM,&thread_SM::StartFrequency,ui->tabWidget,&QTabWidget::setCurrentIndex);
+//        connect(threadSM,&thread_SM::StartPower,ui->tabWidget,&QTabWidget::setCurrentIndex);
+//        connect(threadSM,&thread_SM::StartPerestroyka,ui->tabWidget,&QTabWidget::setCurrentIndex);
 
 
 
-//        QObject::connect(ui->view,SIGNAL(cellClicked(int,int)),threadSM,SLOT(SetProv(int,int)));
+//        connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
+//        connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
+//        connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
+//        connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
+
+//        connect(threadSM,&thread_SM::LogClear,this,&MainWindow::log_wr_message_Block_claer);
+
+//        connect(threadSM,&thread_SM::CreateGraph,this,&MainWindow::CreateGraph2);
+
+//        connect(threadSM,&thread_SM::CreateGraphfrenq,this,&MainWindow::CreateGraphFrenq,Qt::QueuedConnection);
+
+
+
+//        connect(ui->view,SIGNAL(cellClicked(int,int)),threadSM,SLOT(SetProv(int,int)));
 
         threadSM->SetIdLink(SQL_FindIdLink);
 
@@ -224,36 +224,36 @@ void MainWindow::Proverka_Start()
 
             threadDM->moveToThread(new QThread());
 
-            QObject::connect(threadDM->thread(),&QThread::started,threadDM,&thread_DM::Work);
+            connect(threadDM->thread(),&QThread::started,threadDM,&thread_DM::Work);
 
             connect(threadDM,&thread_DM::end, this, &MainWindow::END);
 
 
             threadDM->SetUi(win_power,win_frequency,win_transferCoefficient,win_switchingSignalDM);
 
-            QObject::connect(threadDM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
+            connect(threadDM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
 
-            QObject::connect(threadDM,SIGNAL(Log(QString)),this,SLOT(log_wr_message_Block(QString)));
-            QObject::connect(threadDM,SIGNAL(Log2(QString)),this,SLOT(log_wr_message_Block(QString)));
+            connect(threadDM,SIGNAL(Log(QString)),this,SLOT(log_wr_message_Block(QString)));
+            connect(threadDM,SIGNAL(Log2(QString)),this,SLOT(log_wr_message_Block(QString)));
 
-            QObject::connect(threadDM,SIGNAL(StartFrequency(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
-            QObject::connect(threadDM,SIGNAL(StartPower(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
-            QObject::connect(threadDM,SIGNAL(StartPerestroyka(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
+            connect(threadDM,SIGNAL(StartFrequency(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
+            connect(threadDM,SIGNAL(StartPower(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
+            connect(threadDM,SIGNAL(StartPerestroyka(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
 
-            QObject::connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
-            QObject::connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
-            QObject::connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
-            QObject::connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
+            connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
+            connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
+            connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
+            connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
 
-            QObject::connect(threadDM->win_transferCoefficient->tableWidgetPerestrouka,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafPerestrouka(int,int)));
-            QObject::connect(threadDM->win_frequency->tableWidgetAChH,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafAChH(int,int)));
-            QObject::connect(threadDM,SIGNAL(LogClear()),this,SLOT(log_wr_message_Block_claer()));
-            QObject::connect(threadDM,SIGNAL(CreateGraph()),this,SLOT(CreateGraph()));
+            connect(threadDM->win_transferCoefficient->tableWidgetPerestrouka,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafPerestrouka(int,int)));
+            connect(threadDM->win_frequency->tableWidgetAChH,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafAChH(int,int)));
+            connect(threadDM,SIGNAL(LogClear()),this,SLOT(log_wr_message_Block_claer()));
+            connect(threadDM,SIGNAL(CreateGraph()),this,SLOT(CreateGraph()));
 
 
-            QObject::connect(threadDM, &thread_DM::updateGraph, this, &MainWindow::UpdateGraph);
+            connect(threadDM, &thread_DM::updateGraph, this, &MainWindow::UpdateGraph);
 
-            QObject::connect(threadDM, &thread_DM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
+            connect(threadDM, &thread_DM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
 
 
         //    threadDM->win_frequency->ProverkaGraph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
@@ -319,53 +319,53 @@ void MainWindow::Proverka_Start()
 
             MyAddGraph(win_frequency,win_transferCoefficient);
 
-           // delete threadSMDM;
+            delete threadSMDM;
 
             threadSMDM = new thread_SMDM(Micran1,N9000,HMP2020,TP,ui->view);
 
+            connect(threadSMDM,&thread_SMDM::addBDZapros,this,&MainWindow::addBD);
+
             threadSMDM->setListRegyl(ListRegyl);
 
-            //Перевели блок СМ в новый поток
-            //potok3 = new MyPotok();
-           // threadSMDM->moveToThread(potok3);
+            //threadSMDM->moveToThread(new QThread());
 
-            threadSMDM->moveToThread(new QThread());
+            //(threadSMDM->thread(),&QThread::started,threadSMDM,&thread_SMDM::Work);
 
-            connect(threadSMDM->thread(),&QThread::started,threadSMDM,&thread_SMDM::Work);
+            connect(this,&MainWindow::work_threadSMDM,threadSMDM,&thread_SMDM::Work);
 
-            //QObject::connect(potok3,SIGNAL(started()),threadSMDM,SLOT(Work()));
+            //connect(potok3,SIGNAL(started()),threadSMDM,SLOT(Work()));
 
             connect(threadSMDM,&thread_SMDM::end, this, &MainWindow::END);
 
-            QObject::connect(threadSMDM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
+            connect(threadSMDM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
 
             threadSMDM->SetUi(win_power,win_frequency,win_transferCoefficient,win_switchingSignalSMDM);
-            QObject::connect(threadSMDM,SIGNAL(Log(QString)),this,SLOT(log_wr_message_Block(QString)));
-            QObject::connect(threadSMDM,SIGNAL(Log2(QString)),this,SLOT(log_wr_message_Block(QString)));
+            connect(threadSMDM,SIGNAL(Log(QString)),this,SLOT(log_wr_message_Block(QString)));
+            connect(threadSMDM,SIGNAL(Log2(QString)),this,SLOT(log_wr_message_Block(QString)));
 
-            QObject::connect(threadSMDM,SIGNAL(StartFrequency(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
-            QObject::connect(threadSMDM,SIGNAL(StartPower(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
-            QObject::connect(threadSMDM,SIGNAL(StartPerestroyka(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
+            connect(threadSMDM,SIGNAL(StartFrequency(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
+            connect(threadSMDM,SIGNAL(StartPower(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
+            connect(threadSMDM,SIGNAL(StartPerestroyka(int)),ui->tabWidget,SLOT(setCurrentIndex(int)));
 
-            QObject::connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
-            QObject::connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
-            QObject::connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
-            QObject::connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
+            connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
+            connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
+            connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
+            connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
 
-            QObject::connect(threadSMDM,SIGNAL(LogClear()),this,SLOT(log_wr_message_Block_claer()));
-            QObject::connect(threadSMDM,SIGNAL(CreateGraph()),this,SLOT(CreateGraph3()));
-
-
-            QObject::connect(threadSMDM, &thread_SMDM::updateGraph, this, &MainWindow::UpdateGraph);
-
-            QObject::connect(threadSMDM, &thread_SMDM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
+            connect(threadSMDM,SIGNAL(LogClear()),this,SLOT(log_wr_message_Block_claer()));
+            connect(threadSMDM,SIGNAL(CreateGraph()),this,SLOT(CreateGraph3()));
 
 
-            QObject::connect(threadSMDM->win_transferCoefficient->tableWidgetPerestrouka,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafPerestrouka(int,int)));
-            QObject::connect(threadSMDM->win_frequency->tableWidgetAChH,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafAChH(int,int)));
+            connect(threadSMDM, &thread_SMDM::updateGraph, this, &MainWindow::UpdateGraph);
 
-          //  threadSMDM->win_frequency->ProverkaGraph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
-          //  threadSMDM->win_transferCoefficient->Graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+            connect(threadSMDM, &thread_SMDM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
+
+
+            connect(threadSMDM->win_transferCoefficient->tableWidgetPerestrouka,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafPerestrouka(int,int)));
+            connect(threadSMDM->win_frequency->tableWidgetAChH,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafAChH(int,int)));
+
+           threadSMDM->win_frequency->ProverkaGraph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+           threadSMDM->win_transferCoefficient->Graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 
 
             threadSMDM->SetIdLink(SQL_FindIdLink);
@@ -410,9 +410,10 @@ void MainWindow::Proverka_Start()
 
             //timer->start(fps);
 
-            threadSMDM->thread()->start();
 
-            //potok3->start();
+            emit work_threadSMDM();
+
+          //  threadSMDM->thread()->start();
 
             DisebleElements();
 
@@ -435,6 +436,7 @@ void MainWindow::END()
 
     qDebug () << "END MainWindow";
 
+
     Button_StartProverka->setDisabled(0);
     GroupBox_RadioButton->setDisabled(0);
     EtapGroup_Device->setDisabled(0);
@@ -444,4 +446,11 @@ void MainWindow::END()
     ui->view->setDisabled(0);
     win_frequency->tableWidgetAChH->setDisabled(0);
     win_transferCoefficient->tableWidgetPerestrouka->setDisabled(0);
+
+
+
+    QMessageBox msgBox;
+    msgBox.setText("ПРОВЕРКА ЗАВЕРШЕНА.");
+    msgBox.exec();
+
 }

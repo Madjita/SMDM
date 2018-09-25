@@ -7,7 +7,6 @@ void MainWindow::log_wr_message(QString msg)
 {
 
    log_text->append(msg);
-
    log_text->moveCursor(QTextCursor::End); // перемещаем курсор в начало документа, чтобы всегда было видно новую строчку
 
 }
@@ -24,11 +23,7 @@ void MainWindow::log_wr_message_Ist(QString msg)
 void MainWindow::log_wr_message_Micran(QString msg)
 {
     log_text_Micran->append(msg);
-
     log_text_Micran->moveCursor(QTextCursor::End,QTextCursor::MoveAnchor); // перемещаем курсор в начало документа, чтобы всегда было видно новую строчку
-
-  //  qDebug () << "log_text->moveCursor msg = " << msg;
-
 
 }
 

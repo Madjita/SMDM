@@ -1,6 +1,12 @@
 #include <mainwindow.h>
 #include "ui_mainwindow.h"
 
+#define NERAVN 4
+
+#define KF_l 19.5
+#define KF_U 21.5
+
+
 void MainWindow::DisebleElementsRetult()
 {
 
@@ -560,7 +566,7 @@ void MainWindow::LoadResult()
                     RepairListMax.append(list->last().value(3).toDouble());
                     RepairListMin.append(list->last().value(4).toDouble());
 
-                    if(list->last().value(2).toDouble() >= 2)
+                    if(list->last().value(2).toDouble() >= NERAVN)
                     {
                         win_frequency->tableWidgetAChH->item(j,i)->setBackground(QBrush(Qt::red));
                         flag = true;
@@ -679,25 +685,34 @@ void MainWindow::LoadResult()
             RepairListPerestroykaX.clear();
 
             int kol =-10;
+            double interval =0;
             do
             {
                 RepairListX1.append(sql.value(0).toDouble());
                 RepairListY1.append(sql.value(1).toDouble());
                 RepairListPerestrouka.append(sql.value(2).toDouble());
                 RepairListPerestroykaX.append(kol);
-
-                if(sql.value(1).toDouble() > kol+2 || sql.value(1).toDouble() < kol-2)
-                {
-                    win_transferCoefficient->tableWidgetPerestrouka->item(j,i)->setBackground(QBrush(Qt::red));
-                    flag = true;
-                }
                 kol++;
+
+
+                if(RepairListY1.count() < 20)
+                {
+                        continue ;
+                }
+
+                interval = qAbs(qAbs(RepairListY1.last())-qAbs(RepairListY1.first()));
 
             } while (sql.next());
 
-            if(!flag)
+            qDebug() << RepairListY1.count() << ") " <<  interval;
+
+            if(interval  > KF_l && interval < KF_U)
             {
                 win_transferCoefficient->tableWidgetPerestrouka->item(j,i)->setBackground(QBrush(Qt::green));
+            }
+            else
+            {
+               win_transferCoefficient->tableWidgetPerestrouka->item(j,i)->setBackground(QBrush(Qt::red));
             }
 
             flag = false;
@@ -752,10 +767,10 @@ void MainWindow::LoadingStartGraphResult()
     AddGraphResult();
 
     win_frequency->ProverkaGraph->xAxis->setRange(900,2200);
-    win_frequency->ProverkaGraph->yAxis->setRange(-4,2);
+    win_frequency->ProverkaGraph->yAxis->setRange(-10,2);
 
-    win_transferCoefficient->Graph->xAxis->setRange(-14,14);
-    win_transferCoefficient->Graph->yAxis->setRange(-14,14);
+    win_transferCoefficient->Graph->xAxis->setRange(-12,12);
+    win_transferCoefficient->Graph->yAxis->setRange(-30,14);
 
     win_frequency->ProverkaGraph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
     win_transferCoefficient->Graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
@@ -772,7 +787,7 @@ void MainWindow::LoadTableResultat()
 
     QSqlQueryModel *SQL_chekProverka;
 
-    QSqlQueryModel *model = NULL;
+    QSqlQueryModel *model = nullptr;
 
     if(PutEtap == "ПСИ")
     {
@@ -849,7 +864,7 @@ void MainWindow::LoadTableResultat()
     }
 
 
-    if(model != NULL)
+    if(model != nullptr)
     {
         if (model->lastError().isValid())
         {
@@ -1066,6 +1081,7 @@ void MainWindow::LoadTableResultat()
                               " AND Proverka.[Имя проверки] = 'SwitchingSignalSM'");
 
 
+
                     sql = BD->zapros("SELECT DISTINCT GraphPoint.NumberGraph,GraphPoint.Y,GraphPoint.[Вход],GraphPoint.[Выход]"
                               " FROM Proverka"
                               " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
@@ -1085,7 +1101,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSM_2->lcdNumber->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSM_2->pushButton_1->setIcon(R3_Red);
                         win_switchingSignalSM_2->pushButton_1->setIconSize(win_switchingSignalSM_2->pushButton_1->size());
@@ -1100,7 +1116,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSM_2->lcdNumber_2->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSM_2->pushButton_2->setIcon(R3_Red);
                         win_switchingSignalSM_2->pushButton_2->setIconSize(win_switchingSignalSM_2->pushButton_2->size());
@@ -1115,7 +1131,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSM_2->lcdNumber_3->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSM_2->pushButton_3->setIcon(R3_Red);
                         win_switchingSignalSM_2->pushButton_3->setIconSize(win_switchingSignalSM_2->pushButton_3->size());
@@ -1130,7 +1146,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSM_2->lcdNumber_4->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSM_2->pushButton_4->setIcon(R3_Red);
                         win_switchingSignalSM_2->pushButton_4->setIconSize(win_switchingSignalSM_2->pushButton_4->size());
@@ -1188,7 +1204,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalDM_2->lcdNumber->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalDM_2->pushButton_1->setIcon(R3_Red);
                         win_switchingSignalDM_2->pushButton_1->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
@@ -1203,7 +1219,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalDM_2->lcdNumber_2->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalDM_2->pushButton_2->setIcon(R3_Red);
                         win_switchingSignalDM_2->pushButton_2->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
@@ -1218,7 +1234,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalDM_2->lcdNumber_3->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalDM_2->pushButton_3->setIcon(R3_Red);
                         win_switchingSignalDM_2->pushButton_3->setIconSize(win_switchingSignalDM_2->pushButton_3->size());
@@ -1233,7 +1249,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalDM_2->lcdNumber_4->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalDM_2->pushButton_4->setIcon(R3_Red);
                         win_switchingSignalDM_2->pushButton_4->setIconSize(win_switchingSignalDM_2->pushButton_4->size());
@@ -1292,7 +1308,8 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSMDM_2->lcdNumber_PRD->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSMDM_2->pushButton_PRD_1->setIcon(R3_Red);
                         win_switchingSignalSMDM_2->pushButton_PRD_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_1->size());
@@ -1307,7 +1324,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSMDM_2->lcdNumber_PRD_2->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSMDM_2->pushButton_PRD_2->setIcon(R3_Red);
                         win_switchingSignalSMDM_2->pushButton_PRD_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_2->size());
@@ -1324,7 +1341,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSMDM_2->lcdNumber_PRD_3->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSMDM_2->pushButton_PRD_3->setIcon(R3_Red);
                         win_switchingSignalSMDM_2->pushButton_PRD_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_3->size());
@@ -1341,7 +1358,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSMDM_2->lcdNumber_PRD_4->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSMDM_2->pushButton_PRD_4->setIcon(R3_Red);
                         win_switchingSignalSMDM_2->pushButton_PRD_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_4->size());
@@ -1357,7 +1374,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSMDM_2->lcdNumber_PRM->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSMDM_2->pushButton_PRM_1->setIcon(R3_Red);
                         win_switchingSignalSMDM_2->pushButton_PRM_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_1->size());
@@ -1373,7 +1390,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSMDM_2->lcdNumber_PRM_2->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
 
                         win_switchingSignalSMDM_2->pushButton_PRM_2->setIcon(R3_Red);
@@ -1389,7 +1406,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSMDM_2->lcdNumber_PRM_3->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSMDM_2->pushButton_PRM_3->setIcon(R3_Red);
                         win_switchingSignalSMDM_2->pushButton_PRM_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_3->size());
@@ -1404,7 +1421,7 @@ void MainWindow::LoadTableResultat()
 
                     win_switchingSignalSMDM_2->lcdNumber_PRM_4->display(sql.value(1).toDouble());
 
-                    if(sql.value(1) < -5)
+                    if(sql.value(1).toDouble() < -20)
                     {
                         win_switchingSignalSMDM_2->pushButton_PRM_4->setIcon(R3_Red);
                         win_switchingSignalSMDM_2->pushButton_PRM_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_4->size());
@@ -1471,7 +1488,7 @@ void MainWindow::ClickCheckBoxGraf_winReuslt(int r,int c)
             point =  PoiskGraph_2(r,c);
 
             win_frequency->ProverkaGraph->xAxis->setRange(ListX[point-1].first()-50,ListX[point-1].last()+50);
-            win_frequency->ProverkaGraph->yAxis->setRange(-4,2);
+             win_frequency->ProverkaGraph->yAxis->setRange(-10,2);
 
 
             win_frequency->ProverkaGraph->graph(point)->setData(ListX[point-1],ListY[point-1]);
@@ -1594,8 +1611,8 @@ void MainWindow::ClickCheckBoxGraf_winReuslt2(int r,int c)
             win_transferCoefficient->tableWidgetPerestrouka->reset();
             point =  PoiskGraph2_2(r,c);
 
-            win_transferCoefficient->Graph->xAxis->setRange(-14,14);
-            win_transferCoefficient->Graph->yAxis->setRange(-14,14);
+            win_transferCoefficient->Graph->xAxis->setRange(-12,12);
+            win_transferCoefficient->Graph->yAxis->setRange(-30,14);
 
 
             win_transferCoefficient->Graph->graph(point)->setData(PerestroykaX[point],ListY1[point]);
