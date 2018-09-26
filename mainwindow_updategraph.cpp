@@ -6,7 +6,7 @@
 //Функция отрисовки графика ачх
 void MainWindow::UpdateGraph()
 {
-    qDebug () << "UpdateGraph () " << win_frequency->ProverkaGraph->graphCount();
+   // qDebug () << "UpdateGraph () " << win_frequency->ProverkaGraph->graphCount();
 
     if(threadSM != NULL )
     {
@@ -59,7 +59,7 @@ void MainWindow::UpdateGraph()
     }
 
 
-    qDebug () << "UpdateGraph () ";
+    //qDebug () << "UpdateGraph () ";
 
     if(threadDM->flagEnd == true)
     {

@@ -8,9 +8,7 @@ TP_SMDM::TP_SMDM()
 {
 
     this->moveToThread(new QThread());
-
     connect(this->thread(),&QThread::started,this,&TP_SMDM::process_start);
-
     this->thread()->start();
 
 }
@@ -114,7 +112,6 @@ void TP_SMDM::SetTp()
 {
 
     udpsocket1->close();
-
     udpsocket65400->close();
     udpsocket65401->close();
     udpsocket65500->close();
@@ -186,6 +183,7 @@ void TP_SMDM::Connect()
         emit Log("===================\n");
         emit Log2("[Соединение не установленно(ERROR)] \n");
     }
+
     // udpsocket20->close();
     // udpsocket21->close();
 
@@ -197,18 +195,20 @@ void TP_SMDM::Connect()
 //Функция Отключения сокетов
 void TP_SMDM::DisConnectToSoket()
 {
-    /*
-    udpsocket->close(); // UDP soket Для Переключения реле Пульта "A1"выход по "A9"
-    udpsocket1->close(); // UDP soket Для чтения информации с сети от пульта по A выходу (Пульт -> коммутатор)
-    udpsocket2->close(); // UDP soket Для Переключения реле Пульта "A10"выхода по "A18"
-    udpsocket3->close();
-    udpsocket4->close(); // UDP soket Для чтения информации с сети от пульта по B выходу (Пульт <- коммутатор)
-    udpsocket5->close(); // UDP soket Для Переключения реле Пульта "В1"выход до B"9"
-    udpsocket6->close(); // UDP soket Для Переключения реле Пульта B"10" выхода до B"18"
-    udpsocket7->close();
-    udpsocket8->close(); // UDP soket Для Переключения реле Пульта A0 соединить с A выход
-    udpsocket9->close(); // UDP soket Для Переключения реле Пульта B0 соединить с B выход
-    */
+
+    udpsocket1->close();
+    udpsocket65400->close();
+    udpsocket65401->close();
+    udpsocket65500->close();
+    udpsocket65510->close();
+    udpsocket65511->close();
+    udpsocket65521->close();
+    udpsocket65523->close();
+    udpsocket65526->close();
+    udpsocket65531->close();
+    udpsocket65533->close();
+
+    p_udpSocketOut->close(); // UDP soket для Переключения каналов реле Коммутатора СМ16-4
 }
 
 //Проверка принял  ли Пульт нашу команду
@@ -367,7 +367,6 @@ bool TP_SMDM::ReleA(int A)
         rele_portON(list_k1,2); //включение портов К2
         zaprosSOST_rele(2);
 
-
         flag = readDatagramK2();
 
         if(A>20 && flag == true)
@@ -394,10 +393,15 @@ bool TP_SMDM::ReleA(int A)
 
 
     if(flag == false)
+    {
         ReleA(A);
+         qDebug() << "A don't open";
+    }
+    else
+    {
+       return false;
+    }
 
-
-    return flag;
 }
 
 bool TP_SMDM::ReleB(int B)
@@ -539,9 +543,14 @@ bool TP_SMDM::ReleB(int B)
     }
 
     if(flag == false)
+    {
         ReleB(B);
-
-    return flag;
+        qDebug() << "B don't open";
+    }
+    else
+    {
+       return false;
+    }
     //////////////////////////////////////////////////////////////////////////
 }
 
@@ -1124,7 +1133,7 @@ void TP_SMDM::rele_portON(QStringList polojenie, int rele)
 
     if(rele==1)
     {
-        udpsocket65533->bind(65533);
+       // udpsocket65533->bind(65533);
         udpsocket65533->writeDatagram(a,13,QHostAddress(IPaddrPLATA),65533); //¢ª«îç¥­¨¥ ¯®àâ®¢ 1
     }
     if(rele==2)
@@ -1146,25 +1155,25 @@ void TP_SMDM::zaprosSOST_rele(int rele)
 {
     if(rele==1)
     {
-        udpsocket65533->bind(65532);
+       // udpsocket65533->bind(65532);
         udpsocket65533->writeDatagram(noup,3,QHostAddress(IPaddrPLATA),65532);
         rele_seichas=1;
     }
     if(rele==2)
     {
-        udpsocket65533->bind(65529);
+       // udpsocket65533->bind(65529);
         udpsocket65533->writeDatagram(noup,3,QHostAddress(IPaddrPLATA),65529);
         rele_seichas=2;
     }
     if(rele==3)
     {
-        udpsocket65533->bind(65527);
+       // udpsocket65533->bind(65527);
         udpsocket65533->writeDatagram(noup,3,QHostAddress(IPaddrPLATA),65527);
         rele_seichas=3;
     }
     if(rele==4)
     {
-        udpsocket65533->bind(65524);
+       // udpsocket65533->bind(65524);
         udpsocket65533->writeDatagram(noup,3,QHostAddress(IPaddrPLATA),65524);
         rele_seichas=4;
     }

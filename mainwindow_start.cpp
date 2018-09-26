@@ -325,6 +325,8 @@ void MainWindow::Proverka_Start()
 
             connect(threadSMDM,&thread_SMDM::addBDZapros,this,&MainWindow::addBD);
 
+            connect(threadSMDM,&thread_SMDM::errorMessage,this,&MainWindow::errorMessage);
+
             threadSMDM->setListRegyl(ListRegyl);
 
             //threadSMDM->moveToThread(new QThread());

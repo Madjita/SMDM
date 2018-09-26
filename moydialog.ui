@@ -88,7 +88,7 @@
    <item row="2" column="2">
     <widget class="QLineEdit" name="lineEdit_6">
      <property name="text">
-      <string>10.12.0.90</string>
+      <string>10.12.1.47</string>
      </property>
      <property name="maxLength">
       <number>15</number>

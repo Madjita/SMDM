@@ -120,9 +120,12 @@ public:
 
     bool writePort();
 
-
+    int count_replayMessage;
     void Rele_Kom_PRD(int in,int out);
+    int count_replayMessage_PRD;
     void Rele_Kom_PRM(int in,int out);
+    int count_replayMessage_PRM;
+
     void Rele_Kom_10MGH_PRD (int out);
     void Rele_Kom_10MGH_PRM (int out);
 
@@ -161,7 +164,7 @@ signals:
     void updateGraphPerestrouyka();
 
     void addBDZapros(QString);
-
+    void errorMessage(QString);
 
 
 public:

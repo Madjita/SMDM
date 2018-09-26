@@ -55,21 +55,32 @@ void thread_SMDM::SetEtap(QString etapGet)
 
 bool thread_SMDM::writePort()
 {
+    count_replayMessage++;
+
     p_udpSocketOut->writeDatagram(a,50,QHostAddress("192.168.1.233"),30020);
 
-    bool ok = readDatagram_p_udpSocketOut();
+    bool ok = false;
+    ok = readDatagram_p_udpSocketOut();
 
     if(ok)
     {
+        count_replayMessage =0;
         return ok;
     }
     else
     {
-       //Если не пришел ответ.
-       qDebug() << "ERROR OTVET SMDM";
+        //Если не пришел ответ.
+        qDebug() << "ERROR OTVET SMDM";
 
-       writePort();
-       return ok;
+        if(count_replayMessage > 2)
+        {
+             count_replayMessage =0;
+             return false;
+        }
+        else
+        {
+            writePort();
+        }
     }
 
 }
@@ -178,9 +189,14 @@ void thread_SMDM::Ysilenie_PRM(int ysilenie,int out)
 
 void thread_SMDM::Rele_Kom_PRD(int in,int out)
 {
-    if(in > 10)
+    count_replayMessage_PRD++;
+
+    if(count_replayMessage_PRD == 1)
     {
-        in -=2;
+        if(in > 10)
+        {
+            in -=2;
+        }
     }
 
     for(int i=18;i < 26;i++)
@@ -191,7 +207,7 @@ void thread_SMDM::Rele_Kom_PRD(int in,int out)
 
     for(int i=10; i< 18;i++)
     {
-        qDebug () << "i = " << i << "  in = " << (in+9);
+       // qDebug () << "i = " << i << "  in = " << (in+9);
 
         if(i==(in+1))//+17 Не знаю откуда это число но пусть будет на всякий случай
         {
@@ -219,26 +235,46 @@ void thread_SMDM::Rele_Kom_PRD(int in,int out)
         }
     }
 
-    bool ok = writePort();
+    bool ok = false;
+    ok = writePort();
 
     if(ok)
     {
         emit Log("Переключен реле коммутатора с  "+ QString::number(in) +" на выход "+QString::number(out) +".\n");
+        count_replayMessage_PRD =0;
         return;
     }
     else
     {
-       //Если не пришел ответ.
-       qDebug() << "ERROR OTVET SMDM";
+        //Если не пришел ответ.
+        qDebug() << "ERROR OTVET SMDM PRD : " << count_replayMessage_PRD;
+
+        if(count_replayMessage_PRD > 5)
+        {
+
+            count_replayMessage_PRD = 0;
+            emit errorMessage("SMDM PRM");
+            sem.acquire();
+        }
+        else
+        {
+            Rele_Kom_PRD(in,out);
+        }
+
     }
 
 }
 
 void thread_SMDM::Rele_Kom_PRM(int in,int out)
 {
-    if(in > 10)
+    count_replayMessage_PRM++;
+
+    if(count_replayMessage_PRM == 1)
     {
-        in -=2;
+        if(in > 10)
+        {
+            in -=2;
+        }
     }
 
     for(int i=10;i < 18;i++)
@@ -248,7 +284,7 @@ void thread_SMDM::Rele_Kom_PRM(int in,int out)
 
     for(int i=18; i< 26;i++)
     {
-        qDebug () << "i = " << i << "  in = " << (in+9);
+       // qDebug () << "i = " << i << "  in = " << (in+9);
 
         if(i==(in+9))//+17 Не знаю откуда это число но пусть будет на всякий случай
         {
@@ -277,25 +313,33 @@ void thread_SMDM::Rele_Kom_PRM(int in,int out)
 
     }
 
+    bool ok = false;
+    ok = writePort();
 
-//        p_udpSocketOut->writeDatagram(a,50,QHostAddress("192.168.1.233"),30020);
+    qDebug() << "LOL = " << ok << "N = " << count_replayMessage_PRM;
 
-        bool ok =  writePort();
+    if(ok)
+    {
+        emit Log("Переключен реле коммутатора с  "+ QString::number(in) +" на выход "+QString::number(out) +".\n");
+        count_replayMessage_PRM =0;
+        return;
+    }
+    else
+    {
+        //Если не пришел ответ.
+        qDebug() << "ERROR OTVET SMDM PRM : " << count_replayMessage_PRM;
 
-        if(ok)
+        if(count_replayMessage_PRM > 5)
         {
-            emit Log("Переключен реле коммутатора с  "+ QString::number(in) +" на выход "+QString::number(out) +".\n");
-            return;
+           emit errorMessage("SMDM PRM");
+           count_replayMessage_PRM = 0;
+           sem.acquire();
         }
         else
         {
-           //Если не пришел ответ.
-           qDebug() << "ERROR OTVET SMDM";
-           Rele_Kom_PRM(in,out);
-           return;
+            Rele_Kom_PRM(in,out);
         }
-
-
+    }
 }
 
 void thread_SMDM::Rele_Kom_10MGH_PRD(int out)
@@ -477,6 +521,11 @@ void thread_SMDM::Work()
 
 void thread_SMDM::process_start()
 {
+    count_replayMessage_PRM =0;
+    count_replayMessage_PRD =0;
+    count_replayMessage =0;
+
+
     for(int i=0;i<50;i++)
     {
         a[i] = '\0';
@@ -835,7 +884,7 @@ void thread_SMDM::StartProverka4()
 
     date = QDateTime::currentDateTime();
     FlagGoodAchH = true;
-    viPrintf(Micran1->vi, "OUTPut:STATe ON\r\n");
+    viPrintf(Micran1->vi, const_cast<ViString>("OUTPut:STATe ON\r\n"));
     Micran1->Log("Включить выход ВЧ.\n");
 
     // Проверка АЧХ Выходы ПРМ (удобней проходить по тому реле где больше проводов)
@@ -891,7 +940,7 @@ void thread_SMDM::StartProverka4()
 bool thread_SMDM::readDatagram_p_udpSocketOut()
 {
     bool flag = false;
-    this->thread()->sleep(2);
+    this->thread()->msleep(250);
 
     while(p_udpSocketOut->hasPendingDatagrams())
     {
@@ -902,15 +951,22 @@ bool thread_SMDM::readDatagram_p_udpSocketOut()
         p_udpSocketOut->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
 
 
-        qDebug() << "GET UDP Poket";
+        qDebug() << "GET UDP Poket :" <<datagram;
 
         flag = true;
     }
 
     if(flag == false)
+    {
         qDebug() << "NOT GET UDP Poket";
+        return flag;
+    }
+    else
+    {
+        return flag;
+    }
 
-    return flag;
+
 }
 
 
@@ -920,7 +976,6 @@ void thread_SMDM::ProverkaAchH_PRM(int A)
 {
 
     TP->ReleB(A);
-
 
     if(A>=0 && A<=10)
     {
@@ -1117,45 +1172,45 @@ void thread_SMDM::AchH()
     {
 
         //Задает полосу просмотра для отображения сигнала на анализаторе....
-        viPrintf(N9000->vi, "FREQuency:STARt %d MHz\r\n",(end-GnFREQuencyStep));
+        viPrintf(N9000->vi, const_cast<ViString>("FREQuency:STARt %d MHz\r\n"),(end-GnFREQuencyStep));
         N9000->Log("Установить начальную частоту просмотра "+QString::number(end-GnFREQuencyStep)+" MHz\n");
 
-        viPrintf(N9000->vi, "FREQuency:STOP %d MHz\r\n",(end+GnFREQuencyStep));
+        viPrintf(N9000->vi, const_cast<ViString>("FREQuency:STOP %d MHz\r\n"),(end+GnFREQuencyStep));
         N9000->Log("Установить конечную частоту просмотра "+QString::number(end+GnFREQuencyStep)+" MHz\n");
 
 
 
-        viPrintf(Micran1->vi, "SOURce:FREQuency:MODE FIXed\r\n");
+        viPrintf(Micran1->vi, const_cast<ViString>("SOURce:FREQuency:MODE FIXed\r\n"));
         Micran1->Log("Установить MODE: FIXed\n");
 
 
         // Set power level value
-        viPrintf(Micran1->vi, "SOURce:POWer:LEVel %d DBM\r\n", GnPower);
+        viPrintf(Micran1->vi, const_cast<ViString>("SOURce:POWer:LEVel %d DBM\r\n"), GnPower);
         Micran1->Log("Установить Мощность: "+QString::number(GnPower)+" dBm\n");
 
-        viPrintf(Micran1->vi, "SOURce:FREQuency %d MHz\r\n",end);
+        viPrintf(Micran1->vi, const_cast<ViString>("SOURce:FREQuency %d MHz\r\n"),end);
         Micran1->Log("Установить Частоту: "+QString::number(end)+" MHz\n");
 
         // qDebug()<<"FREQuency = "<< end;
         // Set trigger automatic mode
-        viPrintf(Micran1->vi, "INITiate:CONTinuous ON\r\n");
+        viPrintf(Micran1->vi, const_cast<ViString>("INITiate:CONTinuous ON\r\n"));
 
         // Set power out on
-        viPrintf(Micran1->vi, "OUTPut:STATe ON\r\n"); // Включить/Выключить выход СВЧ
+        viPrintf(Micran1->vi, const_cast<ViString>("OUTPut:STATe ON\r\n")); // Включить/Выключить выход СВЧ
         Micran1->Log("Включить выход ВЧ.\n");
 
         // Check errors
-        viQueryf(Micran1->vi,"SYSTem:ERRor?\n","%T",buff);
+        viQueryf(Micran1->vi,const_cast<ViString>("SYSTem:ERRor?\n"),const_cast<ViString>("%T"),buff);
         Micran1->Log("Ошибка: "+QString(buff)+"\n");
 
 
-        Sleep(150);
+        this->thread()->msleep(50);
 
-        viPrintf(N9000->vi, "CALC:MARK:MAX\n");
+        viPrintf(N9000->vi, const_cast<ViString>("CALC:MARK:MAX\n"));
         N9000->Log("Захватить максимум.\n");
-        viQueryf(N9000->vi, "CALC:MARK:Y?\n", "%lf", &dResultY);
+        viQueryf(N9000->vi, const_cast<ViString>("CALC:MARK:Y?\n"), const_cast<ViString>("%lf"), &dResultY);
         N9000->Log("Считанный Y :"+QString::number(dResultY)+" дб\n");
-        viQueryf(N9000->vi, "CALC:MARK:X?\n", "%lf", &dResultX);
+        viQueryf(N9000->vi, const_cast<ViString>("CALC:MARK:X?\n"), const_cast<ViString>("%lf"), &dResultX);
         N9000->Log("Считанный X :"+QString::number(dResultX/pow(10,6))+" MHz\n");
 
         x.append(dResultX/pow(10,6));
@@ -1169,6 +1224,13 @@ void thread_SMDM::AchH()
         dResultY = PosleRegyl; // положили в переменную число после регулировки для не изменения в запросе переменной
 
         y.append(PosleRegyl);
+
+        if(PosleRegyl < -60 )
+        {
+            qDebug() << "ERROR";
+            //emit errorMessage("SMDM Ach");
+//            this->thread()->wait();
+        }
 
 
 
@@ -1195,7 +1257,7 @@ void thread_SMDM::AchH()
         emit addBDZapros("INSERT INTO GraphPoint (Data,IdResult,X,Y,NumberGraph,Неравномерность,Минимум,Максимум,DataProverki) VALUES('"+date.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"','"+QString::number(dResultX/pow(10,6))+"','"+QString::number(dResultY)+"','"+QString::number(ListX.count()+1)+"','"+QString::number(NeravnACHX)+"','"+QString::number(min)+"','"+QString::number(max)+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"')");
 
 
-        qDebug() << "signal  updateGraph";
+        //qDebug() << "signal  updateGraph";
         emit updateGraph();
 
         sem.acquire();
@@ -1384,7 +1446,8 @@ void thread_SMDM::StartProverka5()
         for(int k=11;k<=18;k++)
         {
             SetCheck(this);
-            if( k%2 == 0)
+            //четные числа
+            if(k%2 == 0)
             {
                 TP->ReleB(k);
                 Rele_Kom_PRM(k,j);
@@ -1485,8 +1548,8 @@ void thread_SMDM::Proverka_5(int KoefPeredachi)
     Micran1->Log("Установить MODE: FIXed\n");
 
     // Set power level value
-//    viPrintf(Micran1->vi, "SOURce:POWer:LEVel %d DBM\r\n",KoefPeredachi); // Установка Мощности для 1550 МГЦ.
-//    Micran1->Log("Установить Мощность: "+QString::number(KoefPeredachi)+" dBm\n");
+    //    viPrintf(Micran1->vi, "SOURce:POWer:LEVel %d DBM\r\n",KoefPeredachi); // Установка Мощности для 1550 МГЦ.
+    //    Micran1->Log("Установить Мощность: "+QString::number(KoefPeredachi)+" dBm\n");
     viPrintf(Micran1->vi, "SOURce:POWer:LEVel -10 DBM\r\n"); // Установка Мощности для 1550 МГЦ.
     Micran1->Log("Установить Мощность: "+QString::number(KoefPeredachi)+" dBm\n");
 
@@ -1534,7 +1597,7 @@ void thread_SMDM::Proverka_5(int KoefPeredachi)
 
     if(y1.count() < 20)
     {
-            return ;
+        return ;
     }
 
     auto interval = qAbs(qAbs(y1.last())-qAbs(y1.first()));

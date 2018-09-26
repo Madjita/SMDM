@@ -331,6 +331,8 @@ public slots:
     void GoNext();                          // Функция просмотра выбранного результата
 
      void SetTabProverki(int r,int c);
+
+     void errorMessage(QString data);
 private:
     Ui::MainWindow *ui;
     Ui::Power* win_power;   // в форме electricalpower имя electricalpower, поэтому и тип описан как electricalpower. Но обязательно нужен #include "ui_electricalpower.h"

@@ -55,7 +55,7 @@ void thread_SM::Ypravlenie(int in, int out)
 
     for(int i=0;i<41;i++)
     {
-        a[i] = NULL;
+        a[i] = '\0';
     }
 
 

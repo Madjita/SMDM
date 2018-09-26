@@ -150,6 +150,15 @@ void MainWindow::SetTabProverki(int r, int c)
     }
 }
 
+void MainWindow::errorMessage(QString data)
+{
+    QMessageBox msgBox;
+    msgBox.setText("Ошибка. Блок "+data+" не отвечает на запросы. Проверка остановленна.");
+    msgBox.exec();
+
+    threadSMDM->sem.release();
+}
+
 
 void MainWindow::CreateLog()
 {
