@@ -140,6 +140,8 @@ signals:
     void updateGraph();
     void updateGraphPerestrouyka();
 
+    void addBDZapros(QString);
+
 public:
     Micran_Gen*     Micran1;
     N9000A*         N9000;

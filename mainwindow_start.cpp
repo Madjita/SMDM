@@ -207,18 +207,16 @@ void MainWindow::Proverka_Start()
 
             MyAddGraph(win_frequency,win_transferCoefficient);
 
-           // delete threadDM;
+            delete threadDM;
 
             threadDM = new thread_DM(Micran1,N9000,HMP2020,TP,ui->view);
 
             threadDM->setListRegyl(ListRegyl);
 
-            //Перевели блок СМ в новый поток
-           // potok2 = new MyPotok();
+            connect(this,&MainWindow::startDM,threadDM,&thread_DM::Work);
 
-            threadDM->moveToThread(new QThread());
+            connect(threadDM,&thread_DM::addBDZapros,this,&MainWindow::addBD);
 
-            connect(threadDM->thread(),&QThread::started,threadDM,&thread_DM::Work);
 
             connect(threadDM,&thread_DM::end, this, &MainWindow::END);
 
@@ -250,8 +248,8 @@ void MainWindow::Proverka_Start()
             connect(threadDM, &thread_DM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
 
 
-        //    threadDM->win_frequency->ProverkaGraph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
-         //   threadDM->win_transferCoefficient->Graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+            threadDM->win_frequency->ProverkaGraph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+            threadDM->win_transferCoefficient->Graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 
             threadDM->SetIdLink(SQL_FindIdLink);
 
