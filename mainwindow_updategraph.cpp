@@ -6,9 +6,7 @@
 //Функция отрисовки графика ачх
 void MainWindow::UpdateGraph()
 {
-   // qDebug () << "UpdateGraph () " << win_frequency->ProverkaGraph->graphCount();
-
-    if(threadSM != NULL )
+    if(threadSM != nullptr )
     {
         if(threadSM->flagEnd == true)
         {
@@ -49,10 +47,10 @@ void MainWindow::UpdateGraph()
 
             }
 
-            if(threadSM->y1.count()>0 && threadSM->Start5Proverka==true && timer_perestroyka->isActive() == false)
-            {
-                timer_perestroyka->start(fps);
-            }
+//            if(threadSM->y1.count()>0 && threadSM->Start5Proverka==true && timer_perestroyka->isActive() == false)
+//            {
+//                timer_perestroyka->start(fps);
+//            }
 
             threadSM->sem.release();
         }
@@ -89,10 +87,10 @@ void MainWindow::UpdateGraph()
 
         }
 
-        if(threadDM->y1.count()>0 && threadDM->Start5Proverka==true && timer_perestroyka->isActive() == false)
-        {
-            timer_perestroyka->start(fps);
-        }
+//        if(threadDM->y1.count()>0 && threadDM->Start5Proverka==true && timer_perestroyka->isActive() == false)
+//        {
+//            timer_perestroyka->start(fps);
+//        }
 
         threadDM->sem.release();
 
@@ -127,10 +125,10 @@ void MainWindow::UpdateGraph()
 
         }
 
-        if(threadSMDM->y1.count()>0 && threadSMDM->Start5Proverka==true && timer_perestroyka->isActive() == false)
-        {
-            timer_perestroyka->start(fps);
-        }
+//        if(threadSMDM->y1.count()>0 && threadSMDM->Start5Proverka==true && timer_perestroyka->isActive() == false)
+//        {
+//            timer_perestroyka->start(fps);
+//        }
 
         threadSMDM->sem.release();
 

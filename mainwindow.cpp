@@ -41,45 +41,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-
-
-
     newLog = new Log();
     newLog->setBD(BD);
 
-    threadSM = new thread_SM(Micran1,N9000,HMP2020,TP,ui->view);
-
-    connect(threadSM,&thread_SM::SQL_add,this,&MainWindow::addBD);
-
-    threadSM->SQL_OneProverka = new QSqlQueryModel();
-
-
-    threadSM->setListRegyl(ListRegyl);
-    threadSM->SetUi(win_power,win_frequency,win_transferCoefficient,win_switchingSignalSM);
-
-    connect(this,&MainWindow::startSM,threadSM,&thread_SM::Work);
-    connect(threadSM, &thread_SM::updateGraph, this, &MainWindow::UpdateGraph);
-    connect(threadSM, &thread_SM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
-    connect(threadSM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
-    connect(threadSM,&thread_SM::end, this, &MainWindow::END);
-    connect(threadSM,&thread_SM::Log,this,&MainWindow::log_wr_message_Block);
-
-    connect(threadSM,&thread_SM::Log2,this,&MainWindow::log_wr_message_Block);
-    connect(threadSM,&thread_SM::StartFrequency,ui->tabWidget,&QTabWidget::setCurrentIndex);
-    connect(threadSM,&thread_SM::StartPower,ui->tabWidget,&QTabWidget::setCurrentIndex);
-    connect(threadSM,&thread_SM::StartPerestroyka,ui->tabWidget,&QTabWidget::setCurrentIndex);
-    connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
-    connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
-    connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
-    connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
-    connect(threadSM,&thread_SM::LogClear,this,&MainWindow::log_wr_message_Block_claer);
-    connect(threadSM,&thread_SM::CreateGraph,this,&MainWindow::CreateGraph2);
-    connect(threadSM,&thread_SM::CreateGraphfrenq,this,&MainWindow::CreateGraphFrenq,Qt::QueuedConnection);
-    connect(ui->view,SIGNAL(cellClicked(int,int)),threadSM,SLOT(SetProv(int,int)));
-
-
-
-
+    threadSM = new thread_SM();
     threadDM = new thread_DM();
     threadSMDM = new thread_SMDM();
 
@@ -96,17 +61,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(Button_PDF,&QPushButton::clicked,this,&MainWindow::PDF);
 
 
-
-
 }
 
 MainWindow::~MainWindow()
 {
-    DisableDevice();
+   // DisableDevice();
 
-    threadSM->p_udpSocketOut->close();
+//    threadSM->p_udpSocketOut->close();
+//    threadSM->thread()->terminate();
 
-    threadSM->thread()->terminate();
+
+//    threadSMDM->p_udpSocketOut->close();
+//    threadSMDM->thread()->terminate();
+
 
     delete ui;
 }
@@ -244,7 +211,7 @@ void MainWindow::CreateLog()
 void MainWindow::CreateDevice()
 {
     //Таймер для графиков
-    fps =200;
+    fps =175;
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(UpdateGraph()));
@@ -253,7 +220,6 @@ void MainWindow::CreateDevice()
     connect(timerKolibrovka, SIGNAL(timeout()), this, SLOT(UpdateGraphRegylirovka()));
 
     timer_perestroyka = new QTimer();
-
     connect(timer, SIGNAL(timeout()), this, SLOT(UpdateGraphPerestrouyka()));
 
 
@@ -1015,7 +981,7 @@ void MainWindow::CreateStartSeitingGraph()
     ProverkaList5 = new QWidget(); // окно проверки
 
 
-    // win_frequency->setupUi(ProverkaList3);
+    //win_frequency->setupUi(ProverkaList3);
     //win_transferCoefficient->setupUi(ProverkaList4);
 
     win_frequency->ProverkaGraph->xAxis->setLabel("Частота(МГц)");

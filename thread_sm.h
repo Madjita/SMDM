@@ -42,6 +42,9 @@ public:
 
 
 public:
+    char a[50];
+    int count_replayMessage;
+
     QSqlQueryModel* Link;
     QSqlQueryModel* ProverkaList;
 
@@ -80,7 +83,6 @@ public:
 
     QUdpSocket* p_udpSocketOut; // UDP soket для Переключения каналов реле Коммутатора СМ16-4
 
-    QMutex m_mutex;
 
     QSemaphore sem,sem2,sem3;
 
@@ -150,6 +152,9 @@ public slots:
     void Ypravlenie(int in,int out);
     void perecl(char* a,int index,int out);
 
+    bool readDatagram_p_udpSocketOut();
+    bool writePort();
+
 signals:
     void Log(QString);
     void Log2(QString);
@@ -167,6 +172,8 @@ signals:
     void CreateGraphfrenq();
 
     void SQL_add(QString);
+
+    void addBDZapros(QString);
 
 public:
     Micran_Gen*     Micran1;

@@ -5,6 +5,10 @@
 #include <QMessageBox>
 #include <QtGui>
 
+#define KF_l 19.5
+#define KF_U 21.5
+#define ACHH 4
+
 
 thread_SM::thread_SM()
 {
@@ -13,8 +17,26 @@ thread_SM::thread_SM()
 
 void thread_SM::process_start()
 {
+    count_replayMessage =0;
 
-    qDebug () << "process_start";
+
+    for(int i=0;i<50;i++)
+    {
+        a[i] = '\0';
+    }
+
+    //шапка
+    a[1]=0x64;
+    a[2]=static_cast<char>(0x80);
+    a[5]=0x32;
+    a[6]=0x31;
+    a[7]=0x44;
+
+    //усиление
+    a[26]=0*2+20; //В данном случае установил 0 дБ
+    a[27]=0*2+20; //В данном случае установил 0 дБ
+    a[28]=0*2+20; //В данном случае установил 0 дБ
+    a[29]=0*2+20; //В данном случае установил 0 дБ
 
 }
 
@@ -49,16 +71,58 @@ void thread_SM::perecl(char* a,int index,int out)
 
 }
 
+bool thread_SM::readDatagram_p_udpSocketOut()
+{
+   bool flag = false;
+   this->thread()->msleep(250);
+
+   while(p_udpSocketOut->hasPendingDatagrams())
+   {
+       QByteArray datagram;
+       datagram.resize(static_cast<int>(p_udpSocketOut->pendingDatagramSize()));
+       QHostAddress sender;
+       quint16 senderPort;
+       p_udpSocketOut->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
+
+
+       qDebug() << "GET UDP Poket :" <<datagram;
+       flag = true;
+
+       if(datagram[7] == static_cast<char>(0x03))
+       {
+           qDebug() << "ERROR KS UDP Poket";
+           flag = false;
+       }
+   }
+
+   if(flag == false)
+   {
+       qDebug() << "NOT GET UDP Poket";
+       return flag;
+   }
+   else
+   {
+       return flag;
+   }
+}
+
+bool thread_SM::writePort()
+{
+    p_udpSocketOut->writeDatagram(a,50,QHostAddress("192.168.1.231"),30020);
+
+    bool ok = false;
+    ok = readDatagram_p_udpSocketOut();
+
+    return ok;
+}
+
 void thread_SM::Ypravlenie(int in, int out)
 {
-    char a[41];
 
-    for(int i=0;i<41;i++)
+    for(int i=10;i < 26;i++)
     {
-        a[i] = '\0';
+        a[i] ='\0';
     }
-
-
 
     switch (in)
     {
@@ -168,13 +232,9 @@ thread_SM::thread_SM(Micran_Gen*  Micran1Get,N9000A*   N9000Get,PowerSourse*  HM
     flagEnd(false)
 {
     Micran1 = Micran1Get;
-
     N9000 = N9000Get;
-
     HMP2020 = HMP2020Get;
-
     TP = TP_SMDMGet;
-
     view = viewGet;
 
 
@@ -187,15 +247,10 @@ thread_SM::thread_SM(Micran_Gen*  Micran1Get,N9000A*   N9000Get,PowerSourse*  HM
     //SQL_OneProverknew QSqlQueryModel();
 
 
-    p_udpSocketOut = new QUdpSocket();
-    p_udpSocketOut->bind(30020);
-
 
 
     this->moveToThread(new QThread());
-
     connect(this->thread(),&QThread::started,this,&thread_SM::process_start);
-
     this->thread()->start();
 
 
@@ -203,7 +258,6 @@ thread_SM::thread_SM(Micran_Gen*  Micran1Get,N9000A*   N9000Get,PowerSourse*  HM
 
 thread_SM::~thread_SM()
 {
-    p_udpSocketOut->close();
 }
 
 
@@ -222,14 +276,14 @@ void thread_SM::SetProv(int r, int c)
     {
         if(view->item(r,c)->checkState()==Qt::Checked)
         {
-            if(ListProv.value(r)!=-1)
+            if(ListProv.value(r) != -1)
             {
                 ListProv[r] = true;
             }
         }
         else
         {
-            if(ListProv.value(r)!=-1)
+            if(ListProv.value(r) != -1)
             {
                 ListProv[r] = false;
             }
@@ -324,6 +378,9 @@ void thread_SM::MyClear()
     ListY.clear();
     x10MGh.clear();
     y10MGh.clear();
+    ListPerestrouka.clear();
+    Listy1.clear();
+
 
 
 }
@@ -333,79 +390,42 @@ void thread_SM::Ysilenie(int ysilenie,int out)
 {
 
 
-
-    char a[50];
-
-    for(int i=0; i < 50;i++)
-    {
-        a[i]=NULL;
+    switch (out) {
+    case 1:a[26]= static_cast<char>(ysilenie*2+20);break;
+    case 2:a[27]= static_cast<char>(ysilenie*2+20);break;
+    case 3:a[28]= static_cast<char>(ysilenie*2+20);break;
+    case 4:a[29]= static_cast<char>(ysilenie*2+20);break;
     }
 
-    a[0]=0x64;
-    a[3]=0x80;
-    a[4]=0x32;
-    a[6]=0x31;
-    a[7]=0x44;
-    a[8]=0x05;
-    a[9]=0x00; // 10МГц
 
-    /* a[27] = 0x3f;
-    a[28] = 0x3f;
-    a[29] = 0x3f;
-    a[30] = 0x3f;
+    bool ok = false;
+    ok = writePort();
 
+    qDebug() << "LOL = " << ok << "N = " << count_replayMessage;
 
-   a[0]=0x64;
-    a[2]=0x80;
-    a[5]=0x12;
-    a[6]=0x31;
-    a[7]=0x44;
-    a[8]=0x01;
-    a[9]=0x02;
-    */
-
-    a[26]=ysilenie*2+20;
-    a[27]=ysilenie*2+20;
-    a[28]=ysilenie*2+20;
-    a[29]=ysilenie*2+20;
-
-   /* for(int i=0;i<18;i++)
+    if(ok)
     {
-        if(i==(out+9))
+        emit Log("Установлен коэфициент усиления "+ QString::number(ysilenie) +" на выход "+QString::number(out) +".\n");
+        count_replayMessage =0;
+        return;
+    }
+    else
+    {
+        //Если не пришел ответ.
+        qDebug() << "ERROR OTVET SM Ysilenie: " << count_replayMessage;
+
+        if(count_replayMessage > 5)
         {
-            a[i]= ysilenie*2+20;
+           count_replayMessage = 0;
+           sem.acquire();
         }
-    }*/
-
-
-    for(int i=10; i< 26;i++)
-    {
-      // if(i==(in+17))
-      //  {
-            switch (out)
-            {
-            case 1:
-                a[i]=0x01;
-                break;
-            case 2:
-                a[i]=0x02;
-                break;
-            case 3:
-                a[i]=0x03;
-                break;
-            case 4:
-                a[i]=0x04;
-                break;
-            default:
-                break;
-            }
-      // }
-
+        else
+        {
+           Ysilenie(ysilenie,out);
+        }
     }
 
-    p_udpSocketOut->writeDatagram(a,50,QHostAddress("192.168.1.100"),30020);
 
-    emit Log("Установлен коэфициент усиления "+ QString::number(ysilenie) +" на выход "+QString::number(out) +".\n");
 }
 
 void thread_SM::Rele_Kom(int in,int out)
@@ -414,37 +434,20 @@ void thread_SM::Rele_Kom(int in,int out)
 
   //  QString str = "\00d\80\002\001D\05\00\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"\0"+QString::number(out)+"????\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00";
 
+    count_replayMessage++;
 
-
-    if(in > 10)
+    if(count_replayMessage == 1)
     {
-        in -=2;
+        if(in > 10)
+        {
+            in -=2;
+        }
     }
 
-    char a[50];
-
-    for(int i=0; i < 50;i++)
+    for(int i=10;i < 26;i++)
     {
-        a[i]=NULL;
+        a[i] ='\0';
     }
-
-    a[0]=0x64;
-    a[3]=0x80;
-    a[4]=0x32;
-    a[6]=0x31;
-    a[7]=0x44;
-    a[8]=0x05;
-    a[9]=0x00; // 10МГц
-
-
-    int k = 1*2+20;
-
-
-
-    a[26]= 1*2+20; //QString("%1").arg(k,0,16).toUpper();
-    a[27]=1*2+20;
-    a[28]=1*2+20;
-    a[29]=1*2+20;
 
 
     for(int i=10; i< 26;i++)
@@ -473,72 +476,98 @@ void thread_SM::Rele_Kom(int in,int out)
        }
        else
        {
-            a[i]=NULL;
+            a[i]='\0';
        }
-
-
 
     }
 
 
-   p_udpSocketOut->writeDatagram(a,50,QHostAddress("192.168.1.100"),30020);
+   bool ok = false;
+   ok = writePort();
 
+   qDebug() << "LOL = " << ok << "N = " << count_replayMessage;
 
-   //p_udpSocketOut->writeDatagram(str.toUtf8(),str.count(),QHostAddress("192.168.1.100"),30020);
+   if(ok)
+   {
+       emit Log("Переключен реле коммутатора с  "+ QString::number(in) +" на выход "+QString::number(out) +".\n");
+       count_replayMessage =0;
+       return;
+   }
+   else
+   {
+       //Если не пришел ответ.
+       qDebug() << "ERROR OTVET SM: " << count_replayMessage;
 
-
-    emit Log("Переключен реле коммутатора с  "+ QString::number(in) +" на выход "+QString::number(out) +".\n");
+       if(count_replayMessage > 5)
+       {
+          //emit errorMessage("SM");
+          count_replayMessage = 0;
+          sem.acquire();
+       }
+       else
+       {
+           Rele_Kom(in,out);
+       }
+   }
 
 }
 
 void thread_SM::Rele_Kom_10MGH(int out)
 {
 
-    char a[50];
-
-    for(int i=0; i < 50;i++)
+    for(int i=10;i < 26;i++)
     {
-        a[i]=NULL;
+        a[i] = '\0';
     }
-
-    a[0]=0x64;
-    a[3]=0x80;
-    a[4]=0x32;
-    a[6]=0x31;
-    a[7]=0x44;
-    a[8]=0x05;
-    a[9]=0x00; // 10МГц
-
 
     switch (out)
     {
     case 1:
-        a[9]=0x01; // 10МГц
+        a[9]=0x01;
         break;
     case 2:
-        a[9]=0x02; // 10МГц
+        a[9]=0x02;
         break;
     case 3:
-        a[9]=0x03; // 10МГц
+        a[9]=0x03;
         break;
     case 4:
-        a[9]=0x04; // 10МГц
+        a[9]=0x04;
         break;
     default:
         break;
     }
 
 
-    a[26]=0*2+20;
-    a[27]=0*2+20;
-    a[28]=0*2+20;
-    a[29]=0*2+20;
+    bool ok = false;
+    ok = writePort();
+
+    qDebug() << "LOL = " << ok << "N = " << count_replayMessage;
+
+    if(ok)
+    {
+       emit Log("Переключен реле коммутатора с  "+ QString::number(out) +" на 10МГЦ.\n");
+        count_replayMessage =0;
+        return;
+    }
+    else
+    {
+        //Если не пришел ответ.
+        qDebug() << "ERROR OTVET SM 10 MGH: " << count_replayMessage;
+
+        if(count_replayMessage > 5)
+        {
+           //emit errorMessage("SM");
+           count_replayMessage = 0;
+           sem.acquire();
+        }
+        else
+        {
+            Rele_Kom_10MGH(out);
+        }
+    }
 
 
-
-   p_udpSocketOut->writeDatagram(a,50,QHostAddress("192.168.1.100"),30020);
-
-   emit Log("Переключен реле коммутатора с  "+ QString::number(out) +" на 10МГЦ.\n");
 }
 
 void thread_SM::Work()
@@ -556,36 +585,28 @@ void thread_SM::Work()
     TP->flag_6_proverki=false;
 
 
+    MyClear();
+
+    p_udpSocketOut = new QUdpSocket();
+    p_udpSocketOut->bind(QHostAddress("192.168.1.128"),30020);
+
 
 
     dateStart = QDateTime::currentDateTime();
 
 
-    x.clear();
-    y.clear();
-    x1.clear();
-    y1.clear();
-    ListMin.clear();
-    ListMax.clear();
-    ListNEravn.clear();
-    ListX.clear();
-    ListY.clear();
-    x10MGh.clear();
-    y10MGh.clear();
-    ListPerestrouka.clear();
-    Listy1.clear();
 
 
 
 
 
 
-    emit SQL_add("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Источник питания')");
-    emit SQL_add("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Микран')");
-    emit SQL_add("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Пульт ТП-СМДМ')");
-    emit SQL_add("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Блок')");
-    emit SQL_add("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Анализатор')");
-    emit SQL_add("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Вывод')");
+    emit  addBDZapros("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Источник питания')");
+    emit  addBDZapros("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Микран')");
+    emit  addBDZapros("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Пульт ТП-СМДМ')");
+    emit  addBDZapros("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Блок')");
+    emit  addBDZapros("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Анализатор')");
+    emit  addBDZapros("INSERT INTO Log (Data,DataStart,IdResult,BlockName) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Вывод')");
 
     emit SetDataStart(dateStart);
 
@@ -663,7 +684,7 @@ void thread_SM::StartProverka_1_And_2()
 
     HMP2020->Log("Включить подачу напряжения.\n");
 
-    Sleep(1000);
+    this->thread()->sleep(1);
 
     Tok = HMP2020->query_MEASure_CURRent();
 
@@ -680,12 +701,15 @@ void thread_SM::StartProverka_1_And_2()
     HMP2020->Log("Посчитанная Мощнасть: "+QString::number(P)+"\n");
 
     win_power->lcdNumber_10V_I->display(Tok.toDouble());
-    win_power->lcdNumber_10V_V->display(Volt.toDouble());
+
+    double v = QString(Volt).toDouble();
+
+    win_power->lcdNumber_10V_V->display(v);
     win_power->lcdNumber_10V_Bt->display(P);
 
     if(P > 35)
     {
-        emit SQL_add("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_10V_V->value())+"','"+QString::number(win_power->lcdNumber_10V_I->value())+"','Не соответствует')");
+        emit  addBDZapros("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_10V_V->value())+"','"+QString::number(win_power->lcdNumber_10V_I->value())+"','Не соответствует')");
 
         view->item(0,0)->setBackgroundColor(Qt::red);
         view->item(1,0)->setBackgroundColor(Qt::red);
@@ -701,7 +725,7 @@ void thread_SM::StartProverka_1_And_2()
     else
     {
 
-        emit SQL_add("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_10V_V->value())+"','"+QString::number(win_power->lcdNumber_10V_I->value())+"','Cоответствует')");
+        emit  addBDZapros("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_10V_V->value())+"','"+QString::number(win_power->lcdNumber_10V_I->value())+"','Cоответствует')");
 
         view->item(0,0)->setBackgroundColor(Qt::green);
         view->item(1,0)->setBackgroundColor(Qt::green);
@@ -722,7 +746,7 @@ void thread_SM::StartProverka_1_And_2()
     HMP2020->write_OUTPut(true);
     HMP2020->Log("Включить подачу напряжения.\n");
 
-    Sleep(1000);
+    this->thread()->sleep(1);
 
     Tok = HMP2020->query_MEASure_CURRent();
     HMP2020->Log("Измеренный Ток: "+Tok);
@@ -738,7 +762,9 @@ void thread_SM::StartProverka_1_And_2()
 
 
     win_power->lcdNumber_32V_I->display(Tok.toDouble());
-    win_power->lcdNumber_32V_V->display(Volt.toDouble());
+    v = QString(Volt).toDouble();
+
+    win_power->lcdNumber_32V_V->display(v);
     win_power->lcdNumber_32V_Bt->display(P);
 
 
@@ -748,7 +774,7 @@ void thread_SM::StartProverka_1_And_2()
     {
         flagGood = false;
 
-        emit SQL_add("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_32V_V->value())+"','"+QString::number(win_power->lcdNumber_32V_I->value())+"','Не соответствует')");
+        emit  addBDZapros("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_32V_V->value())+"','"+QString::number(win_power->lcdNumber_32V_I->value())+"','Не соответствует')");
 
         view->item(0,0)->setBackgroundColor(Qt::red);
         view->item(1,0)->setBackgroundColor(Qt::red);
@@ -760,7 +786,7 @@ void thread_SM::StartProverka_1_And_2()
     }
     else
     {
-        emit SQL_add("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_32V_V->value())+"','"+QString::number(win_power->lcdNumber_32V_I->value())+"','Cоответствует')");
+        emit  addBDZapros("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_32V_V->value())+"','"+QString::number(win_power->lcdNumber_32V_I->value())+"','Cоответствует')");
 
         view->item(0,0)->setBackgroundColor(Qt::green);
         view->item(1,0)->setBackgroundColor(Qt::green);
@@ -781,7 +807,7 @@ void thread_SM::StartProverka_1_And_2()
     HMP2020->write_OUTPut(true);
     HMP2020->Log("Включить подачу напряжения.\n");
 
-    Sleep(1000);
+    this->thread()->sleep(1);
 
     Tok = HMP2020->query_MEASure_CURRent();
     HMP2020->Log("Измеренный Ток: "+Tok);
@@ -797,7 +823,9 @@ void thread_SM::StartProverka_1_And_2()
 
 
     win_power->lcdNumber_27V_I->display(Tok.toDouble());
-    win_power->lcdNumber_27V_V->display(Volt.toDouble());
+    v = QString(Volt).toDouble();
+
+    win_power->lcdNumber_27V_V->display(v);
     win_power->lcdNumber_27V_Bt->display(P);
 
 
@@ -805,7 +833,7 @@ void thread_SM::StartProverka_1_And_2()
     {
         flagGood = false;
 
-        emit SQL_add("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_27V_V->value())+"','"+QString::number(win_power->lcdNumber_27V_I->value())+"','Не соответствует')");
+        emit  addBDZapros("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_27V_V->value())+"','"+QString::number(win_power->lcdNumber_27V_I->value())+"','Не соответствует')");
 
         view->item(0,0)->setBackgroundColor(Qt::red);
         view->item(1,0)->setBackgroundColor(Qt::red);
@@ -818,7 +846,7 @@ void thread_SM::StartProverka_1_And_2()
     }
     else
     {
-        emit SQL_add("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_27V_V->value())+"','"+QString::number(win_power->lcdNumber_27V_I->value())+"','Cоответствует')");
+        emit  addBDZapros("INSERT INTO Power (Data,DataProverki,IdLink,PowerResult,Volt,Tok,Sootvetstvie) VALUES('"+QDateTime::currentDateTime().toString("dd.MM.yyyy  hh:mm:ss")+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','"+QString::number(P)+"','"+QString::number(win_power->lcdNumber_27V_V->value())+"','"+QString::number(win_power->lcdNumber_27V_I->value())+"','Cоответствует')");
 
         view->item(0,0)->setBackgroundColor(Qt::green);
         view->item(1,0)->setBackgroundColor(Qt::green);
@@ -832,13 +860,13 @@ void thread_SM::StartProverka_1_And_2()
 
     if(flagGood==false)
     {
-        emit SQL_add("INSERT INTO Result (Date,IdLink,ElectricalPower,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
-        emit SQL_add("INSERT INTO Result (Date,IdLink,Power,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,ElectricalPower,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,Power,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
     }
     else
     {
-        emit SQL_add("INSERT INTO Result (Date,IdLink,ElectricalPower,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
-        emit SQL_add("INSERT INTO Result (Date,IdLink,Power,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,ElectricalPower,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(0,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,Power,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(1,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
     }
 
     HMP2020->Log("Конец 1 и 2 проверки\n");
@@ -856,9 +884,6 @@ void thread_SM::StartProverka3()
     view->reset();
 
     flag=true;
-
-
-    this->thread()->msleep(100);
 
     N9000->write_AVER_STAT(false);
     N9000->Log("Отключаем усреднение: AVER.\n");
@@ -884,7 +909,7 @@ void thread_SM::StartProverka3()
 
         N9000->Log2("Несоответствует\n");
 
-        emit SQL_add("INSERT INTO Result (Date,IdLink,LimitDeviationOfGain,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(2,0), Qt::EditRole).toString()+"','Не Соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,LimitDeviationOfGain,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(2,0), Qt::EditRole).toString()+"','Не Соответствует','"+etap+"')");
     }
     else
     {
@@ -893,7 +918,7 @@ void thread_SM::StartProverka3()
 
         N9000->Log2("Соответствует\n");
 
-        emit SQL_add("INSERT INTO Result (Date,IdLink,LimitDeviationOfGain,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(2,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,LimitDeviationOfGain,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(2,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
 
     }
 
@@ -961,17 +986,8 @@ void thread_SM::StartProverka4()
     }
 
 
-
-    Micran1->write_OUTPut_STATe(true);
+    viPrintf(Micran1->vi, const_cast<ViString>("OUTPut:STATe ON\r\n"));
     Micran1->Log("Включить выход ВЧ.\n");
-
-    for(int i=1;i<=4;i++)
-    {
-        Ysilenie(0,i);
-        //Дописать Вывод в консоль блока его команды
-    }
-
-
     FlagGoodAchH = true;
 
 
@@ -996,7 +1012,7 @@ void thread_SM::StartProverka4()
 
         N9000->Log2("Соответствует\n");
 
-        emit SQL_add("INSERT INTO Result (Date,IdLink,Frequency,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"','Соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,Frequency,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"','Соответствует','"+etap+"')");
     }
     else
     {
@@ -1005,7 +1021,7 @@ void thread_SM::StartProverka4()
 
         N9000->Log2("Несоответствует\n");
 
-        emit SQL_add("INSERT INTO Result (Date,IdLink,Frequency,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,Frequency,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
     }
 
     TP->ReleA(0);
@@ -1041,8 +1057,6 @@ void thread_SM::ProverkaAchH(int A)
 {
     qDebug () << "ProverkaAchH  " << A;
 
-    int trakt=0;
-
     TP->ReleA(A);
 
     if(A>=0 && A<=10)
@@ -1074,9 +1088,9 @@ void thread_SM::ProverkaAchH(int A)
             ListMax2.append(ListMax);
             ListNEravn2.append(ListNEravn);
             if(A > 10)
-                emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(A-1)+"',[Выход]='6' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
+                emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(A-1)+"',[Выход]='6' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
             else
-                emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(A)+"',[Выход]='6' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
+                emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(A)+"',[Выход]='6' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
             break;
         }
         case 1:
@@ -1089,9 +1103,9 @@ void thread_SM::ProverkaAchH(int A)
             ListMax2.append(ListMax);
             ListNEravn2.append(ListNEravn);
             if(A > 10)
-                emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(A-1)+"',[Выход]='7' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
+                emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(A-1)+"',[Выход]='7' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
             else
-                emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(A)+"',[Выход]='7' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
+                emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(A)+"',[Выход]='7' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
             break;
         }
         case 2:
@@ -1104,9 +1118,9 @@ void thread_SM::ProverkaAchH(int A)
             ListMax2.append(ListMax);
             ListNEravn2.append(ListNEravn);
             if(A > 10)
-                emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(A-1)+"',[Выход]='8' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
+                emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(A-1)+"',[Выход]='8' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
             else
-                emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(A)+"',[Выход]='8' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
+                emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(A)+"',[Выход]='8' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
             break;
         }
         case 3:
@@ -1119,9 +1133,9 @@ void thread_SM::ProverkaAchH(int A)
             ListMax2.append(ListMax);
             ListNEravn2.append(ListNEravn);
             if(A > 10)
-                emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(A-1)+"',[Выход]='9' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
+                emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(A-1)+"',[Выход]='9' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
             else
-                emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(A)+"',[Выход]='9' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
+                emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(A)+"',[Выход]='9' WHERE IdResult ='"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListX.count())+"'");
             break;
         }
         }
@@ -1190,23 +1204,23 @@ void thread_SM::AchH(int in,int out)
     while(GnFREQuencyEnd >= end)
     {
 
-        viPrintf(Micran1->vi, "SOURce:FREQuency:MODE FIXed\r\n");
+        viPrintf(Micran1->vi, const_cast<ViString>("SOURce:FREQuency:MODE FIXed\r\n"));
         Micran1->Log("Установить MODE: FIXed\n");
 
 
         // Set power level value
-        viPrintf(Micran1->vi, "SOURce:POWer:LEVel %d DBM\r\n", GnPower);
+        viPrintf(Micran1->vi, const_cast<ViString>("SOURce:POWer:LEVel %d DBM\r\n"), GnPower);
         Micran1->Log("Установить Мощность: "+QString::number(GnPower)+" dBm\n");
 
-        viPrintf(Micran1->vi, "SOURce:FREQuency %d MHz\r\n",end);
+        viPrintf(Micran1->vi, const_cast<ViString>("SOURce:FREQuency %d MHz\r\n"),end);
         Micran1->Log("Установить Частоту: "+QString::number(end)+" MHz\n");
 
         // qDebug()<<"FREQuency = "<< end;
         // Set trigger automatic mode
-        viPrintf(Micran1->vi, "INITiate:CONTinuous ON\r\n");
+        viPrintf(Micran1->vi, const_cast<ViString>("INITiate:CONTinuous ON\r\n"));
 
         // Set power out on
-        viPrintf(Micran1->vi, "OUTPut:STATe ON\r\n"); // Включить/Выключить выход СВЧ
+        viPrintf(Micran1->vi, const_cast<ViString>("OUTPut:STATe ON\r\n")); // Включить/Выключить выход СВЧ
         Micran1->Log("Включить выход ВЧ.\n");
 
         // Check errors
@@ -1214,31 +1228,21 @@ void thread_SM::AchH(int in,int out)
       //  Micran1->Log("Ошибка: "+QString(buff)+"\n");
 
 
-        qDebug () << GnFREQuencyEnd << " GnFREQuencyEnd > = end " << end;
-
         //Задает полосу просмотра для отображения сигнала на анализаторе....
-        viPrintf(N9000->vi, "FREQuency:STARt %d MHz\r\n",(end-GnFREQuencyStep));
+        viPrintf(N9000->vi, const_cast<ViString>("FREQuency:STARt %d MHz\r\n"),(end-GnFREQuencyStep));
         N9000->Log("Установить начальную частоту просмотра "+QString::number(end-GnFREQuencyStep)+" MHz\n");
 
-        viPrintf(N9000->vi, "FREQuency:STOP %d MHz\r\n",(end+GnFREQuencyStep));
+        viPrintf(N9000->vi, const_cast<ViString>("FREQuency:STOP %d MHz\r\n"),(end+GnFREQuencyStep));
         N9000->Log("Установить конечную частоту просмотра "+QString::number(end+GnFREQuencyStep)+" MHz\n");
 
 
-        if(end == 950)
-        {
-            this->thread()->msleep(700);
-        }
-        else
-        {
-            this->thread()->msleep(100);
-        }
+        this->thread()->msleep(200);
 
-
-        viPrintf(N9000->vi, "CALC:MARK:MAX\n");
+        viPrintf(N9000->vi, const_cast<ViString>("CALC:MARK:MAX\n"));
         N9000->Log("Захватить максимум.\n");
-        viQueryf(N9000->vi, "CALC:MARK:Y?\n", "%lf", &dResultY);
+        viQueryf(N9000->vi, const_cast<ViString>("CALC:MARK:Y?\n"), const_cast<ViString>("%lf"), &dResultY);
         N9000->Log("Считанный Y :"+QString::number(dResultY)+" дб\n");
-        viQueryf(N9000->vi, "CALC:MARK:X?\n", "%lf", &dResultX);
+        viQueryf(N9000->vi, const_cast<ViString>("CALC:MARK:X?\n"), const_cast<ViString>("%lf"), &dResultX);
         N9000->Log("Считанный X :"+QString::number(dResultX/pow(10,6))+" MHz\n");
 
         if(dResultY <= -50)
@@ -1262,27 +1266,16 @@ void thread_SM::AchH(int in,int out)
 
         x.append(dResultX/pow(10,6));
 
+        dResultY -=GnPower;
 
-        //разкоментировать когда добавлю калибровку по модулю
-        double ot = fabs(ListRegyl->value(ReleB+18).value(y.count()));
-
-        double ot2 = fabs(ListRegyl->value(ReleA).value(y.count()));
-
-        qDebug () << "ReleB = " << ReleB;
-        qDebug () << "ReleA = " << ReleA;
-
-
-
-       double PosleRegyl  = dResultY + (ot+ot2);
-
-
-       qDebug () << "PosleRegyl =  " << dResultY << " + ("<< ot << " + " << ot2<<") = " <<PosleRegyl;
-
+        //разкоментировать когда добавлю калибровку
+        double ot = ListRegyl->value(ReleB).value(y.count());
+        double ot2 = ListRegyl->value(ReleA).value(y.count());
+        double PosleRegyl = dResultY - ot - ot2;
 
         dResultY = PosleRegyl; // положили в переменную число после регулировки для не изменения в запросе переменной
 
-        y.append(dResultY);
-
+        y.append(PosleRegyl);
 
         auto min1 = std::min_element(y.begin(),y.end());
         auto max1 = std::max_element(y.begin(),y.end());
@@ -1298,7 +1291,7 @@ void thread_SM::AchH(int in,int out)
         date = QDateTime::currentDateTime();
 
 
-        emit SQL_add("INSERT INTO GraphPoint (Data,IdResult,X,Y,NumberGraph,Неравномерность,Минимум,Максимум,DataProverki) VALUES('"+date.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"','"+QString::number(dResultX/pow(10,6))+"','"+QString::number(dResultY)+"','"+QString::number(ListX.count()+1)+"','"+QString::number(NeravnACHX)+"','"+QString::number(min)+"','"+QString::number(max)+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"')");
+        emit  addBDZapros("INSERT INTO GraphPoint (Data,IdResult,X,Y,NumberGraph,Неравномерность,Минимум,Максимум,DataProverki) VALUES('"+date.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(3,0), Qt::EditRole).toString()+"','"+QString::number(dResultX/pow(10,6))+"','"+QString::number(dResultY)+"','"+QString::number(ListX.count()+1)+"','"+QString::number(NeravnACHX)+"','"+QString::number(min)+"','"+QString::number(max)+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"')");
 
         qDebug() << "signal  updateGraph";
         emit updateGraph();
@@ -1306,7 +1299,7 @@ void thread_SM::AchH(int in,int out)
         sem.acquire();
     }
 
-    if(NeravnACHX >2)
+    if(NeravnACHX > ACHH)
     {
         // qDebug()<< "Ошибка! Неравномерность АЧХ "<<NeravnACHX<<" > 2";
 
@@ -1339,7 +1332,7 @@ void thread_SM::AchH(int in,int out)
             point++;
             if(ListX.count()==point)
             {
-                if(NeravnACHX >2)
+                if(NeravnACHX > ACHH)
                 {
                     win_frequency->tableWidgetAChH->item(j,i)->setBackground(QBrush(Qt::red));
 
@@ -1473,6 +1466,7 @@ void thread_SM::StartProverka5()
 
         SetCheck(this);
         TP->ReleB(j+5);
+        Rele_Kom(1,j);
 
 
 
@@ -1483,10 +1477,8 @@ void thread_SM::StartProverka5()
 
             this->thread()->msleep(100);
 
-            //Sleep(1000);
-
             Proverka_5(i,j+5,1);
-            emit SQL_add("UPDATE GraphPoint SET [Вход]='1',[Выход]='"+QString::number(j+5)+"' WHERE IdResult ='"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListPerestrouka.count()+1)+"'");
+            emit  addBDZapros("UPDATE GraphPoint SET [Вход]='1',[Выход]='"+QString::number(j+5)+"' WHERE IdResult ='"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListPerestrouka.count()+1)+"'");
         }
         ListPerestrouka.append(y1); //Для отображения на графике подсчет количества графиков по выходам
         Listy1.append(PerestroykaX);
@@ -1531,8 +1523,8 @@ void thread_SM::StartProverka5()
         SetCheck(this);
 
         TP->ReleB(j+5);
+        Rele_Kom(12,j);// Соединение реле на коммутаторе СМ16-4 "A" вход с 1 выходом
 
-       // Rele_Kom(12,j); // Соединение реле на коммутаторе СМ16-4 "A" вход с 1 выходом
 
         for(int i=-10;i<=10;i++) // -10 до 10
         {
@@ -1542,7 +1534,7 @@ void thread_SM::StartProverka5()
 
             //Sleep(1000);
             Proverka_5(i,j+5,12);
-            emit SQL_add("UPDATE GraphPoint SET [Вход]='11',[Выход]='"+QString::number(j+5)+"' WHERE IdResult ='"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListPerestrouka.count()+1)+"'");
+            emit  addBDZapros("UPDATE GraphPoint SET [Вход]='11',[Выход]='"+QString::number(j+5)+"' WHERE IdResult ='"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"' AND NumberGraph='"+QString::number(ListPerestrouka.count()+1)+"'");
         }
         ListPerestrouka.append(y1);//Для отображения на графике подсчет количества графиков по выходам
         Listy1.append(PerestroykaX);
@@ -1578,12 +1570,12 @@ void thread_SM::StartProverka5()
 
     if(FlagGood5Eshe == true)
     {
-        emit SQL_add("INSERT INTO Result (Date,IdLink,TransferCoefficient,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"','Cоотвутствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,TransferCoefficient,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"','Cоотвутствует','"+etap+"')");
         TP->Log2("Соответствует\n");
     }
     else
     {
-        emit SQL_add("INSERT INTO Result (Date,IdLink,TransferCoefficient,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,TransferCoefficient,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
         TP->Log2("Несоответствует\n");
     }
 
@@ -1620,13 +1612,7 @@ void thread_SM::Proverka_5(int KoefPeredachi,int ReleB,int ReleA)
     Micran1->Log("Установить MODE: FIXed\n");
 
 
-    //KoefPeredachi = 0; /// Задаем 10 ДБ
-
-
-
-   // Sleep(5000);
-
-    GnPower = 0;
+    GnPower = -10;
     // Set power level value
     viPrintf(Micran1->vi, "SOURce:POWer:LEVel %d DBM\r\n",GnPower); // Установка Мощности для 1550 МГЦ.
     Micran1->Log("Установить Мощность: "+QString::number(KoefPeredachi)+" dBm\n");
@@ -1659,34 +1645,27 @@ void thread_SM::Proverka_5(int KoefPeredachi,int ReleB,int ReleA)
 
 
 
-    //разкоментировать когда добавлю калибровку по модулю
-    double ot = fabs(ListRegyl->value(ReleB+18).value(y.count()));
-
-    double ot2 = fabs(ListRegyl->value(ReleA).value(y.count()));
-
-
-   double PosleRegyl  = dResultY + (ot+ot2);
+//    //разкоментировать когда добавлю калибровку по модулю
+//    double ot = fabs(ListRegyl->value(ReleB+18).value(y.count()));
+//    double ot2 = fabs(ListRegyl->value(ReleA).value(y.count()));
+//    double PosleRegyl  = dResultY + (ot+ot2);
 
 
-   qDebug () << "PosleRegyl =  " << dResultY << " + ("<< ot << " + " << ot2<<") = " <<PosleRegyl;
+//   qDebug () << "PosleRegyl =  " << dResultY << " + ("<< ot << " + " << ot2<<") = " <<PosleRegyl;
 
 
-    dResultY = PosleRegyl; // положили в переменную число после регулировки для не изменения в запросе переменной
-
-
+//    dResultY = PosleRegyl; // положили в переменную число после регулировки для не изменения в запросе переменной
 
 
 
 
     x1.append(dResultX/pow(10,6));
-
     y1.append(dResultY);
-
-    PerestroykaX.append(GnPower);
+    PerestroykaX.append(KoefPeredachi);
 
     date = QDateTime::currentDateTime();
 
-    emit SQL_add("INSERT INTO GraphPoint (Data,IdResult,X,Y,[Коэфициент передачи],NumberGraph,DataProverki) VALUES('"+date.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"','"+QString::number(dResultX/pow(10,6))+"','"+QString::number(dResultY)+"','"+QString::number(KoefPeredachi)+"','"+QString::number(ListPerestrouka.count()+1)+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"')");
+    emit  addBDZapros("INSERT INTO GraphPoint (Data,IdResult,X,Y,[Коэфициент передачи],NumberGraph,DataProverki) VALUES('"+date.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(4,0), Qt::EditRole).toString()+"','"+QString::number(dResultX/pow(10,6))+"','"+QString::number(dResultY)+"','"+QString::number(KoefPeredachi)+"','"+QString::number(ListPerestrouka.count()+1)+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"')");
 
 
    Start5Proverka = true;
@@ -1695,15 +1674,21 @@ void thread_SM::Proverka_5(int KoefPeredachi,int ReleB,int ReleA)
     sem3.acquire();
 
 
-    //Примерная мощность для ошибки
-    if(dResultY <= KoefPeredachi + 1 && dResultY >= KoefPeredachi - 1)
+    if(y1.count() < 21)
+    {
+        return ;
+    }
+
+    auto interval = qAbs(qAbs(y1.last())-qAbs(y1.first()));
+
+
+    qDebug () << "LOLKA = " << interval;
+
+
+    if(interval  > KF_l && interval < KF_U)
     {
         view->item(4,0)->setBackgroundColor(Qt::green);
         view->reset();
-
-        FlagGood5 = true;
-        FlagGood5Eshe = true;
-
     }
     else
     {
@@ -1712,8 +1697,8 @@ void thread_SM::Proverka_5(int KoefPeredachi,int ReleB,int ReleA)
 
         FlagGood5 = false;
         FlagGood5Eshe = false;
-
     }
+
 
 }
 
@@ -1739,7 +1724,7 @@ void thread_SM:: StartProverka6()
 
     for(int i=0; i < 10;i++)
     {
-        a[i] = NULL;
+        a[i] = '\0';
     }
 
     a[8] = 0x01;
@@ -1772,18 +1757,18 @@ void thread_SM:: StartProverka6()
         TP->ReleB(i);
         Rele_Kom_10MGH(i-5); // Переключение реле на коммутаторе СМ16-4 с ВЫХ на ПРД к 10 МГЦ
         Proverka10MGU();
-        emit SQL_add("UPDATE GraphPoint SET [Вход]='"+QString::number(i)+"',[Выход]='10 МГЦ' WHERE IdResult ='"+Link->data(Link->index(5,0), Qt::EditRole).toString()+"'AND NumberGraph='"+QString::number(x10MGh.count())+"'");
+        emit  addBDZapros("UPDATE GraphPoint SET [Вход]='"+QString::number(i)+"',[Выход]='10 МГЦ' WHERE IdResult ='"+Link->data(Link->index(5,0), Qt::EditRole).toString()+"'AND NumberGraph='"+QString::number(x10MGh.count())+"'");
     }
 
     if(FlagGood10Mhz == true)
     {
         N9000->Log2("Cоответствует\n");
-        emit SQL_add("INSERT INTO Result (Date,IdLink,SwitchingSignalSM,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(5,0), Qt::EditRole).toString()+"','соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,SwitchingSignalSM,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(5,0), Qt::EditRole).toString()+"','соответствует','"+etap+"')");
     }
     else
     {
         N9000->Log2("Несоответствует\n");
-        emit SQL_add("INSERT INTO Result (Date,IdLink,SwitchingSignalSM,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(5,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,SwitchingSignalSM,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(5,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
     }
 
     flag_6_proverki = false;
@@ -1840,7 +1825,7 @@ void thread_SM::Proverka10MGU()
     viQueryf(Micran1->vi,"SYSTem:ERRor?\n","%T",buff);
     Micran1->Log("Ошибка: "+QString(buff)+"\n");
 
-     Sleep(1000);
+    this->thread()->sleep(1);
 
     viPrintf(N9000->vi, "CALC:MARK:MAX\n");
     N9000->Log("Захватить максимум.\n");
@@ -1856,7 +1841,7 @@ void thread_SM::Proverka10MGU()
     y10MGh.append(dResultY);
 
     date = QDateTime::currentDateTime();
-    emit SQL_add("INSERT INTO GraphPoint (Data,IdResult,X,Y,NumberGraph,DataProverki) VALUES('"+date.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(5,0), Qt::EditRole).toString()+"','"+QString::number(dResultX/pow(10,6))+"','"+QString::number(dResultY)+"','"+QString::number(x10MGh.count())+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"')");
+    emit  addBDZapros("INSERT INTO GraphPoint (Data,IdResult,X,Y,NumberGraph,DataProverki) VALUES('"+date.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(5,0), Qt::EditRole).toString()+"','"+QString::number(dResultX/pow(10,6))+"','"+QString::number(dResultY)+"','"+QString::number(x10MGh.count())+"','"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"')");
 
 
     if(x10MGh.count()==1)
@@ -1877,7 +1862,7 @@ void thread_SM::Proverka10MGU()
     }
 
     //Примерная мощность для ошибки
-    if(dResultY < -5)
+    if(dResultY < -20)
     {
         if(x10MGh.count()==1)
         {
@@ -1956,7 +1941,7 @@ void thread_SM::StartProverka7()
         view->reset();
         TP->Log2("Несоответствует\n");
         date = QDateTime::currentDateTime();
-        emit SQL_add("INSERT INTO Result (Date,IdLink,Ithernet,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(6,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,Ithernet,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(6,0), Qt::EditRole).toString()+"','Не соответствует','"+etap+"')");
     }
     else
     {
@@ -1964,7 +1949,7 @@ void thread_SM::StartProverka7()
         view->reset();
         TP->Log2("Соответствует\n");
         date = QDateTime::currentDateTime();
-        emit SQL_add("INSERT INTO Result (Date,IdLink,Ithernet,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(6,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,Ithernet,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(6,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
     }
 
     TP->Log("Конец 7 проверки.\n");
@@ -1985,7 +1970,7 @@ void thread_SM::StartProveroka8()
         view->item(7,0)->setBackgroundColor(Qt::green);
         view->reset();
         date = QDateTime::currentDateTime();
-        emit SQL_add("INSERT INTO Result (Date,IdLink,LongTime,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(7,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
+        emit  addBDZapros("INSERT INTO Result (Date,IdLink,LongTime,[Этап]) VALUES('"+dateStart.toString("dd.MM.yyyy  hh:mm:ss")+"','"+Link->data(Link->index(7,0), Qt::EditRole).toString()+"','Cоответствует','"+etap+"')");
         TP->Log2("Конец 8 проверки.\n");
     }
 
@@ -2029,23 +2014,6 @@ void thread_SM::END()
     TP->ReleB(0);
     TP->ReleA(21);
     TP->ReleB(21);
-
-
-
-
-//    TP->udpsocket->close(); // UDP soket Для Переключения реле Пульта "A1"выход по "A9"
-//    TP->udpsocket1->close(); // UDP soket Для чтения информации с сети от пульта по A выходу (Пульт -> коммутатор)
-//    TP->udpsocket2->close(); // UDP soket Для Переключения реле Пульта "A10"выхода по "A18"
-//    TP->udpsocket3->close();
-//    TP->udpsocket4->close(); // UDP soket Для чтения информации с сети от пульта по B выходу (Пульт <- коммутатор)
-//    TP->udpsocket5->close(); // UDP soket Для Переключения реле Пульта "В1"выход до B"9"
-//    TP->udpsocket6->close(); // UDP soket Для Переключения реле Пульта B"10" выхода до B"18"
-//    TP->udpsocket7->close();
-//    TP->udpsocket8->close(); // UDP soket Для Переключения реле Пульта A0 соединить с A выход
-//    TP->udpsocket9->close(); // UDP soket Для Переключения реле Пульта B0 соединить с B выход
-//    p_udpSocketOut->close(); // UDP soket для Переключения каналов реле Коммутатора СМ16-4
-
-
 
     emit end();
 
@@ -2123,7 +2091,6 @@ void thread_SM::StratRegyl()
     flagRegylK0=false;
 
     flagRegylK0=true;
-    m_mutex.lock();
     sem2.acquire();
 
     QTextStream  writeStream(file);
@@ -2172,7 +2139,6 @@ void thread_SM::StratRegyl()
                 qDebug() <<" i-1 = "<<  releA;
             }
             //flagRegyl_true;
-            m_mutex.lock();
             sem.acquire();
             TP->ReleA(i);
 
@@ -2211,7 +2177,6 @@ void thread_SM::StratRegyl()
                 writeStream <<"B"<<releA<<":"<<endl;
             }
             flagRegyl_B = true;
-            m_mutex.lock();
             sem.acquire();
             TP->ReleB(i);
 

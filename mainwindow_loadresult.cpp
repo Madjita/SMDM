@@ -112,14 +112,14 @@ void MainWindow::PutSer()
         QSqlQuery sql;
 
         sql = BD->zapros("SELECT DISTINCT [Этап] "
-                  " FROM Proverka"
-                  " JOIN Device ON Device.IdDevice == DeviceSerial.IdDevice"
-                  " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                  " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                  " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                  " JOIN Result ON Link.IdLink == Result.IdLink"
-                  " Where Device.[Название устройства] = '"+PutBlok+"'"
-                  " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'");
+                         " FROM Proverka"
+                         " JOIN Device ON Device.IdDevice == DeviceSerial.IdDevice"
+                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'");
 
         sql.first();
 
@@ -183,28 +183,28 @@ void MainWindow::putEtap()
     if(PutEtap !="")
     {
 
-    sql = BD->zapros("SELECT DISTINCT Result.Date , Etap.Etaps"
-                     " FROM Proverka"
-                     " JOIN Device ON Device.IdDevice == DeviceSerial.IdDevice"
-                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                     " JOIN Result ON Link.IdLink == Result.IdLink"
-              " Where Device.[Название устройства] = '"+PutBlok+"'"
-              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-              " AND Result.[Этап] = '"+PutEtap+"'");
-              //" AND (Result.ElectricalPower = 'Cоответствует' OR Result.ElectricalPower = 'Не соответствует')");
+        sql = BD->zapros("SELECT DISTINCT Result.Date , Etap.Etaps"
+                         " FROM Proverka"
+                         " JOIN Device ON Device.IdDevice == DeviceSerial.IdDevice"
+                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                              " AND Result.[Этап] = '"+PutEtap+"'");
+        //" AND (Result.ElectricalPower = 'Cоответствует' OR Result.ElectricalPower = 'Не соответствует')");
 
 
-    qDebug () << PutBlok << " " << PutSerial << " " << PutEtap << " " << sql.value(0).toString();
+        qDebug () << PutBlok << " " << PutSerial << " " << PutEtap << " " << sql.value(0).toString();
 
-    do
-    {
-        if(sql.value(0).toString() != "")
+        do
         {
-            ui->textEdit_PutProverka->insertPlainText(sql.value(0).toString()+" / "+sql.value(1).toString()+"\n");
-        }
-    }while (sql.next());
+            if(sql.value(0).toString() != "")
+            {
+                ui->textEdit_PutProverka->insertPlainText(sql.value(0).toString()+" / "+sql.value(1).toString()+"\n");
+            }
+        }while (sql.next());
 
     }
 
@@ -285,18 +285,18 @@ QSqlQuery MainWindow::Find(int point)
     QSqlQuery sql;
 
     sql = BD->zapros("SELECT DISTINCT Result.IdLink, [Имя проверки]"
-              " FROM Proverka"
-              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-              " JOIN Result ON Link.IdLink == Result.IdLink"
-              " Where Device.[Название устройства] = '"+PutBlok+"'"
-              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-              " AND Result.[Этап] = '"+PutEtap+"'"
-              " AND Etap.Etaps = '"+PutProverka+"'"
-              " AND Result.Date = '"+PutData+"'"
-              " AND Proverka.[Имя проверки] = 'Frequency'");
+                     " FROM Proverka"
+                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                     " JOIN Result ON Link.IdLink == Result.IdLink"
+                     " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                          " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                           " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                             " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                            " AND Proverka.[Имя проверки] = 'Frequency'");
 
 
     QSqlQuery sql1;
@@ -305,22 +305,22 @@ QSqlQuery MainWindow::Find(int point)
 
 
     sql1 = BD->zapros("SELECT DISTINCT [X],[Y],[Неравномерность],[Максимум],[Минимум]"
-               " FROM Proverka"
-               " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-               " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-               " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-               " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-               " JOIN Result ON Link.IdLink == Result.IdLink"
-               " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
-               " Where Device.[Название устройства] = '"+PutBlok+"'"
-               " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-               " AND Result.[Этап] = '"+PutEtap+"'"
-               " AND Etap.Etaps = '"+PutProverka+"'"
-               " AND Result.Date = '"+PutData+"'"
-               " AND GraphPoint.DataProverki = '"+PutData+"'"
-               " AND Result.IdLink = "+sql.value(0).toString()+""
-               " AND GraphPoint.NumberGraph = '"+QString::number(point)+"'"
-               " ORDER BY GraphPoint.[IdGraph]");
+                      " FROM Proverka"
+                      " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                      " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                      " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                      " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                      " JOIN Result ON Link.IdLink == Result.IdLink"
+                      " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
+                      " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                        " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                           " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                            " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                              " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                             " AND GraphPoint.DataProverki = '"+PutData+"'"
+                                                                                                                                                                                                                                                                        " AND Result.IdLink = "+sql.value(0).toString()+""
+                                                                                                                                                                                                                                                                                                                        " AND GraphPoint.NumberGraph = '"+QString::number(point)+"'"
+                                                                                                                                                                                                                                                                                                                                                                                 " ORDER BY GraphPoint.[IdGraph]");
 
     sql1.first();
 
@@ -335,41 +335,41 @@ QSqlQuery MainWindow::Find2(int point)
     QSqlQuery sql;
 
     sql = BD->zapros("SELECT DISTINCT Result.IdLink, [Имя проверки]"
-              " FROM Proverka"
-              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-              " JOIN Result ON Link.IdLink == Result.IdLink"
-              " Where Device.[Название устройства] = '"+PutBlok+"'"
-              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-              " AND Result.[Этап] = '"+PutEtap+"'"
-              " AND Etap.Etaps = '"+PutProverka+"'"
-              " AND Result.Date = '"+PutData+"'"
-              " AND [Имя проверки] = 'TransferCoefficient'");
+                     " FROM Proverka"
+                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                     " JOIN Result ON Link.IdLink == Result.IdLink"
+                     " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                          " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                           " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                             " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                            " AND [Имя проверки] = 'TransferCoefficient'");
 
-   // qDebug() << "kldh;fas;ldashf;lashdf = " << PutProverka;
-   // qDebug() << "TransferCoefficient = "<< sql.value(0).toString();
+    // qDebug() << "kldh;fas;ldashf;lashdf = " << PutProverka;
+    // qDebug() << "TransferCoefficient = "<< sql.value(0).toString();
 
     QSqlQuery sql1;
 
     sql1 = BD->zapros("SELECT DISTINCT [X],[Y],[Коэфициент передачи]"
-               " FROM Proverka"
-               " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-               " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-               " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-               " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-               " JOIN Result ON Link.IdLink == Result.IdLink"
-               " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
-               " Where Device.[Название устройства] = '"+PutBlok+"'"
-               " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-               " AND Result.[Этап] = '"+PutEtap+"'"
-               " AND Etap.Etaps = '"+PutProverka+"'"
-               " AND Result.Date = '"+PutData+"'"
-               " AND GraphPoint.DataProverki = '"+PutData+"'"
-               " AND Result.IdLink = "+sql.value(0).toString()+""
-               " AND GraphPoint.NumberGraph = '"+QString::number(point)+"'"
-               " ORDER BY GraphPoint.[IdGraph]");
+                      " FROM Proverka"
+                      " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                      " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                      " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                      " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                      " JOIN Result ON Link.IdLink == Result.IdLink"
+                      " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
+                      " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                        " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                           " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                            " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                              " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                             " AND GraphPoint.DataProverki = '"+PutData+"'"
+                                                                                                                                                                                                                                                                        " AND Result.IdLink = "+sql.value(0).toString()+""
+                                                                                                                                                                                                                                                                                                                        " AND GraphPoint.NumberGraph = '"+QString::number(point)+"'"
+                                                                                                                                                                                                                                                                                                                                                                                 " ORDER BY GraphPoint.[IdGraph]");
 
 
     return sql1;
@@ -403,39 +403,39 @@ void MainWindow::LoadResult()
     QSqlQuery sql;
 
     sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
-              " FROM Proverka"
-              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-              " JOIN Result ON Link.IdLink == Result.IdLink"
-              " Where Device.[Название устройства] = '"+PutBlok+"'"
-             " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-             " AND Result.[Этап] = '"+PutEtap+"'"
-             " AND Etap.Etaps = '"+PutProverka+"'"
-             " AND Result.Date = '"+PutData+"'"
-             " AND [Имя проверки] = 'ElectricalPower'"
-             " ORDER BY Result.IdLink");
+                     " FROM Proverka"
+                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                     " JOIN Result ON Link.IdLink == Result.IdLink"
+                     " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                          " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                           " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                             " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                            " AND [Имя проверки] = 'ElectricalPower'"
+                                                                                                                                                                                                                            " ORDER BY Result.IdLink");
 
 
 
     QString logId = sql.value(0).toString();
 
     sql = BD->zapros("SELECT Text, BlockName, DataStart"
-              " FROM Proverka"
-              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-              " JOIN Result ON Link.IdLink == Result.IdLink"
-              " JOIN Log ON Result.IdLink == Log.IdResult"
-              " Where Device.[Название устройства] = '"+PutBlok+"'"
-              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-              " AND Result.[Этап] = '"+PutEtap+"'"
-              " AND Etap.Etaps = '"+PutProverka+"'"
-              " AND Log.DataStart = '"+PutData+"'"
-              " AND Result.IdLink = '"+logId+"'"
-              " ORDER BY Log.[IdLog]");
+                     " FROM Proverka"
+                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                     " JOIN Result ON Link.IdLink == Result.IdLink"
+                     " JOIN Log ON Result.IdLink == Log.IdResult"
+                     " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                          " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                           " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                             " AND Log.DataStart = '"+PutData+"'"
+                                                                                                                                                                                                                              " AND Result.IdLink = '"+logId+"'"
+                                                                                                                                                                                                                                                             " ORDER BY Log.[IdLog]");
 
 
     log_text_Ist->clear();
@@ -446,69 +446,68 @@ void MainWindow::LoadResult()
     log_text_Micran->clear();
     log_text_Micran->insertPlainText(sql.value(0).toString());
 
-     sql.next();
+    sql.next();
 
-     log_text_TP->clear();
-     log_text_TP->insertPlainText(sql.value(0).toString());
+    log_text_TP->clear();
+    log_text_TP->insertPlainText(sql.value(0).toString());
 
-     sql.next();
+    sql.next();
 
-     log_text_Block->clear();
-     log_text_Block->insertPlainText(sql.value(0).toString());
+    log_text_Block->clear();
+    log_text_Block->insertPlainText(sql.value(0).toString());
 
-     sql.next();
+    sql.next();
 
-     log_text_N9000->clear();
-     log_text_N9000->insertPlainText(sql.value(0).toString());
+    log_text_N9000->clear();
+    log_text_N9000->insertPlainText(sql.value(0).toString());
 
-     sql.next();
+    sql.next();
 
-     log_text->clear();
-     log_text->insertPlainText(sql.value(0).toString());
+    log_text->clear();
+    log_text->insertPlainText(sql.value(0).toString());
 
 
-     sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
-               " FROM Proverka"
-               " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-               " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-               " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-               " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-               " JOIN Result ON Link.IdLink == Result.IdLink"
-               " Where Device.[Название устройства] = '"+PutBlok+"'"
-              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-              " AND Result.[Этап] = '"+PutEtap+"'"
-              " AND Etap.Etaps = '"+PutProverka+"'"
-              " AND Result.Date = '"+PutData+"'"
-              " AND [Имя проверки] = 'Power'"
-              " ORDER BY Result.IdLink");
+    sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
+                     " FROM Proverka"
+                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                     " JOIN Result ON Link.IdLink == Result.IdLink"
+                     " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                          " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                           " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                             " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                            " AND [Имя проверки] = 'Power'"
+                                                                                                                                                                                                                            " ORDER BY Result.IdLink");
 
 
 
     IdLink = sql.value(0).toString();
 
     sql = BD->zapros("SELECT Result.Power"
-              " FROM Proverka"
-              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-              " JOIN Result ON Link.IdLink == Result.IdLink"
-              " Where Device.[Название устройства] = '"+PutBlok+"'"
-              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-              " AND Result.[Этап] = '"+PutEtap+"'"
-              " AND Etap.Etaps = '"+PutProverka+"'"
-              " AND Result.Date = '"+PutData+"'"
-              " AND Result.IdLink = "+IdLink+"");
+                     " FROM Proverka"
+                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                     " JOIN Result ON Link.IdLink == Result.IdLink"
+                     " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                          " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                           " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                             " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                            " AND Result.IdLink = "+IdLink+"");
 
 
 
 
     LoadTableResultat();
 
+    //win_frequency->setupUi(ProverkaList3);
 
-   win_frequency->setupUi(ProverkaList3);
-
-   win_transferCoefficient->setupUi(ProverkaList4);
+   // win_transferCoefficient->setupUi(ProverkaList4);
 
 
     win_frequency->tableWidgetAChH->setRowCount(5);
@@ -697,7 +696,7 @@ void MainWindow::LoadResult()
 
                 if(RepairListY1.count() < 20)
                 {
-                        continue ;
+                    continue ;
                 }
 
                 interval = qAbs(qAbs(RepairListY1.last())-qAbs(RepairListY1.first()));
@@ -712,7 +711,7 @@ void MainWindow::LoadResult()
             }
             else
             {
-               win_transferCoefficient->tableWidgetPerestrouka->item(j,i)->setBackground(QBrush(Qt::red));
+                win_transferCoefficient->tableWidgetPerestrouka->item(j,i)->setBackground(QBrush(Qt::red));
             }
 
             flag = false;
@@ -783,7 +782,9 @@ void MainWindow::LoadingStartGraphResult()
 void MainWindow::LoadTableResultat()
 {
 
-  //  QSqlQuery *SQL;
+
+
+    //  QSqlQuery *SQL;
 
     QSqlQueryModel *SQL_chekProverka;
 
@@ -792,75 +793,75 @@ void MainWindow::LoadTableResultat()
     if(PutEtap == "ПСИ")
     {
         model = BD->zaprosQueryModel("SELECT DISTINCT [Имя проверки],[Размерность]"
-                        " FROM Proverka"
-                        " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                        " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                        " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                        " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                        " Where Device.[Название устройства] = '"+PutBlok+"'"
-                        " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                        " AND Etap.Etaps = '" +PutProverka+"'"
-                        " AND Etap.ПСИ = 1");
+                                     " FROM Proverka"
+                                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                     " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                          " AND Etap.Etaps = '" +PutProverka+"'"
+                                                                                                                                                                             " AND Etap.ПСИ = 1");
 
         SQL_chekProverka = BD->zaprosQueryModel("SELECT DISTINCT [Описание]"
-                                   "FROM Proverka"
-                                   " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                                   " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                                   " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                                   " JOIN Etap ON Link.IdProverka == Proverka.IdProverka Where Device.[Название устройства] = '"+PutBlok+"'"
-                                   " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                                   " AND Etap.Etaps = '" +PutProverka+"'"
-                                   " AND Etap.ПСИ = 1");
+                                                "FROM Proverka"
+                                                " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                                " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                                " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                                " JOIN Etap ON Link.IdProverka == Proverka.IdProverka Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                                                                                      " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                                                                                         " AND Etap.Etaps = '" +PutProverka+"'"
+                                                                                                                                                                                                                                            " AND Etap.ПСИ = 1");
 
     }
 
     if(PutEtap == "ПИ")
     {
         model = BD->zaprosQueryModel("SELECT DISTINCT [Имя проверки],[Размерность]"
-                        "FROM Proverka"
-                        " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                        " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                        " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                        " JOIN Etap ON Link.IdProverka == Proverka.IdProverka Where Device.[Название устройства] = '"+PutBlok+"'"
-                        " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                        " AND Etap.Etaps = '" +PutProverka+"'"
-                        " AND Etap.ПИ = 1");
+                                     "FROM Proverka"
+                                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                                                                              " AND Etap.Etaps = '" +PutProverka+"'"
+                                                                                                                                                                                                                                 " AND Etap.ПИ = 1");
 
         SQL_chekProverka = BD->zaprosQueryModel("SELECT DISTINCT [Описание]"
-                                   "FROM Proverka"
-                                   " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                                   " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                                   " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                                   " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                                   " Where Device.[Название устройства] = '"+PutBlok+"'"
-                                   " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                                   " AND Etap.Etaps = '" +PutProverka+"'"
-                                   " AND Etap.ПИ = 1");
+                                                "FROM Proverka"
+                                                " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                                " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                                " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                                " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                                " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                                  " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                                     " AND Etap.Etaps = '" +PutProverka+"'"
+                                                                                                                                                                                        " AND Etap.ПИ = 1");
     }
 
     if(PutEtap == "Регулировка")
     {
         model = BD->zaprosQueryModel("SELECT DISTINCT [Имя проверки],[Размерность]"
-                        "FROM Proverka"
-                        " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                        " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                        " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                        " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                        " Where Device.[Название устройства] = '"+PutBlok+"'"
-                        " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                        " AND Etap.Etaps = '" +PutProverka+"'"
-                        " AND Etap.[Регулировка] = 1");
+                                     "FROM Proverka"
+                                     " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                     " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                     " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                     " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                     " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                          " AND Etap.Etaps = '" +PutProverka+"'"
+                                                                                                                                                                             " AND Etap.[Регулировка] = 1");
 
         SQL_chekProverka = BD->zaprosQueryModel("SELECT DISTINCT [Описание]"
-                                   "FROM Proverka"
-                                   " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                                   " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                                   " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                                   " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                                   " Where Device.[Название устройства] = '"+PutBlok+"'"
-                                   " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                                   " AND Etap.Etaps = '" +PutProverka+"'"
-                                   " AND Etap.[Регулировка] = 1");
+                                                "FROM Proverka"
+                                                " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                                " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                                " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                                " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                                " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                                  " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                                     " AND Etap.Etaps = '" +PutProverka+"'"
+                                                                                                                                                                                        " AND Etap.[Регулировка] = 1");
     }
 
 
@@ -873,581 +874,579 @@ void MainWindow::LoadTableResultat()
 
 
 
-    ui->view_2->setObjectName(QStringLiteral("Table"));
-    ui->view_2->setRowCount(model->rowCount());
-    ui->view_2->setColumnCount(model->columnCount());
+        ui->view_2->setObjectName(QStringLiteral("Table"));
+        ui->view_2->setRowCount(model->rowCount());
+        ui->view_2->setColumnCount(model->columnCount());
+
+
+        ui->tabWidget_2->clear();
+
+        QPixmap R1_Gray(":/images/circle_gray.png");
+        QPixmap R2_Green(":/images/circle_zel.png");
+        QPixmap R3_Red(":/images/circle_kras.png");
+
+        // QWidget *ProverkaList1 = new QWidget(); // окно проверки
+        QWidget *ProverkaList2 = new QWidget(); // окно проверки
+        QWidget *ProverkaList3 = new QWidget(); // окно проверки
+        QWidget *ProverkaList4 = new QWidget(); // окно проверки
+        QWidget *ProverkaList5 = new QWidget(); // окно проверки
+
+        //qDebug() << model->columnCount() <<"dsfa" <<  model->rowCount();
 
 
 
-    ui->tabWidget_2->clear();
-
-    QPixmap R1_Gray(":/images/circle_gray.png");
-    QPixmap R2_Green(":/images/circle_zel.png");
-    QPixmap R3_Red(":/images/circle_kras.png");
-
-   // QWidget *ProverkaList1 = new QWidget(); // окно проверки
-    QWidget *ProverkaList2 = new QWidget(); // окно проверки
-    //QWidget *ProverkaList3 = new QWidget(); // окно проверки
-   // QWidget *ProverkaList4 = new QWidget(); // окно проверки
-    QWidget *ProverkaList5 = new QWidget(); // окно проверки
-
-    //qDebug() << model->columnCount() <<"dsfa" <<  model->rowCount();
-
-    for(int i=0;i< ui->view_2->columnCount();i++)
-    {
-        QTableWidgetItem * itemHeader = new QTableWidgetItem();
-
-        itemHeader->setText( model->headerData(i,Qt::Horizontal,Qt::DisplayRole).toString());
-        ui->view_2->setHorizontalHeaderItem(i,itemHeader);
-
-
-//        sql.exec("SELECT "+model->headerData(i,Qt::Horizontal,Qt::DisplayRole).toString()+""
-//                       " FROM Proverka"
-//                       " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-//                       " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-//                       " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-//                       " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-//                       " JOIN Result ON Link.IdLink == Result.IdLink"
-//                       " Where Device.[Название устройства] = '"+PutBlok+"'"
-//                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-//                       " AND Result.[Этап] = '"+PutEtap+"'"
-//                       " AND Etap.Etaps = '"+PutProverka+"'"
-//                       " AND Result.Data = '"+PutData+"'");
-//        sql.next();
-
-//        if(sql.value(0).toString() == NULL)
-//        {
-
-//        }
-//        else
-//        {
-//            if(sql.value(0).toString() == "Cоответствует")
-//            {
-//                  ui->view_2->setHorizontalHeaderItem(i,itemHeader);
-//                  ui->view_2->item(i,0)->setBackgroundColor(Qt::green);
-//            }
-//            else
-//            {
-//                if(sql.value(0).toString() == "Не соотвутствует")
-//                {
-//                    ui->view_2->setHorizontalHeaderItem(i,itemHeader);
-//                    ui->view_2->item(i,0)->setBackgroundColor(Qt::red);
-//                }
-
-//            }
-//        }
-
-
-
-        for(int j=0;j < ui->view_2->rowCount();j++)
+        for(int i=0;i< ui->view_2->columnCount();i++)
         {
+            QTableWidgetItem * itemHeader = new QTableWidgetItem();
 
-            QModelIndex newIndex = model->index(j,i);
-
-            QTableWidgetItem * item = new QTableWidgetItem();
-
-            item->setText(model->data(newIndex, Qt::EditRole).toString());
-
-            // item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable);
+            itemHeader->setText( model->headerData(i,Qt::Horizontal,Qt::DisplayRole).toString());
+            ui->view_2->setHorizontalHeaderItem(i,itemHeader);
 
 
-            if(i==0)
+            //        sql.exec("SELECT "+model->headerData(i,Qt::Horizontal,Qt::DisplayRole).toString()+""
+            //                       " FROM Proverka"
+            //                       " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+            //                       " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+            //                       " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+            //                       " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+            //                       " JOIN Result ON Link.IdLink == Result.IdLink"
+            //                       " Where Device.[Название устройства] = '"+PutBlok+"'"
+            //                       " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+            //                       " AND Result.[Этап] = '"+PutEtap+"'"
+            //                       " AND Etap.Etaps = '"+PutProverka+"'"
+            //                       " AND Result.Data = '"+PutData+"'");
+            //        sql.next();
+
+            //        if(sql.value(0).toString() == NULL)
+            //        {
+
+            //        }
+            //        else
+            //        {
+            //            if(sql.value(0).toString() == "Cоответствует")
+            //            {
+            //                  ui->view_2->setHorizontalHeaderItem(i,itemHeader);
+            //                  ui->view_2->item(i,0)->setBackgroundColor(Qt::green);
+            //            }
+            //            else
+            //            {
+            //                if(sql.value(0).toString() == "Не соотвутствует")
+            //                {
+            //                    ui->view_2->setHorizontalHeaderItem(i,itemHeader);
+            //                    ui->view_2->item(i,0)->setBackgroundColor(Qt::red);
+            //                }
+
+            //            }
+            //        }
+
+
+
+            for(int j=0;j < ui->view_2->rowCount();j++)
             {
-                item->setToolTip(SQL_chekProverka->data(newIndex,Qt::EditRole).toString());
+
+                QModelIndex newIndex = model->index(j,i);
+
+                QTableWidgetItem * item = new QTableWidgetItem();
+
+                item->setText(model->data(newIndex, Qt::EditRole).toString());
+
+                // item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable);
+
+
+                if(i==0)
+                {
+                    item->setToolTip(SQL_chekProverka->data(newIndex,Qt::EditRole).toString());
+                }
+
+                ui->view_2->setItem(j,i,item);
+
+                if(i==0)
+                {
+                    ui->view_2->item(j,0)->setCheckState(Qt::Checked);
+
+
+                    if(ui->view_2->item(j,0)->text() == "Power")
+                    {
+                        win_power_2->setupUi(ProverkaList2);
+
+                        QSqlQuery sql;
+
+                        sql = BD->zapros("SELECT DISTINCT Power.Sootvetstvie,Power.PowerResult,Power.Volt,Power.Tok"
+                                         " FROM Proverka"
+                                         " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                                         " JOIN Power ON Result.IdLink == Power.IdLink"
+                                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                              " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                                               " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                                                 " AND Power.DataProverki = '"+PutData+"'"
+                                                                                                                                                                                                                                                       " AND Result.IdLink = "+IdLink+""
+                                                                                                                                                                                                                                                                                      " ORDER BY Power.[IdPower]");
+
+
+                        win_power_2->lcdNumber_10V_Bt->display(sql.value(1).toDouble());
+                        win_power_2->lcdNumber_10V_V->display(sql.value(2).toDouble());
+                        win_power_2->lcdNumber_10V_I->display(sql.value(3).toDouble());
+
+                        if(sql.value(0) == "Cоответствует")
+                        {
+                            win_power_2->pushButton_10V->setIcon(R2_Green);
+                            win_power_2->pushButton_10V->setIconSize(win_power_2->pushButton_10V->size());
+                        }
+                        else
+                        {
+                            win_power_2->pushButton_10V->setIcon(R3_Red);
+                            win_power_2->pushButton_10V->setIconSize(win_power_2->pushButton_10V->size());
+                        }
+
+                        sql.next();
+
+                        win_power_2->lcdNumber_32V_Bt->display(sql.value(1).toDouble());
+                        win_power_2->lcdNumber_32V_V->display(sql.value(2).toDouble());
+                        win_power_2->lcdNumber_32V_I->display(sql.value(3).toDouble());
+
+                        if(sql.value(0) == "Cоответствует")
+                        {
+                            win_power_2->pushButton_32V->setIcon(R2_Green);
+                            win_power_2->pushButton_32V->setIconSize(win_power_2->pushButton_32V->size());
+                        }
+                        else
+                        {
+                            win_power_2->pushButton_32V->setIcon(R3_Red);
+                            win_power_2->pushButton_32V->setIconSize(win_power_2->pushButton_32V->size());
+                        }
+
+                        sql.next();
+
+                        win_power_2->lcdNumber_27V_Bt->display(sql.value(1).toDouble());
+                        win_power_2->lcdNumber_27V_V->display(sql.value(2).toDouble());
+                        win_power_2->lcdNumber_27V_I->display(sql.value(3).toDouble());
+
+                        if(sql.value(0) == "Cоответствует")
+                        {
+                            win_power_2->pushButton_27V->setIcon(R2_Green);
+                            win_power_2->pushButton_27V->setIconSize(win_power_2->pushButton_27V->size());
+                        }
+                        else
+                        {
+                            win_power_2->pushButton_27V->setIcon(R3_Red);
+                            win_power_2->pushButton_27V->setIconSize(win_power_2->pushButton_27V->size());
+                        }
+
+                        ui->tabWidget_2->addTab(ProverkaList2,ui->view_2->item(j,0)->text());
+
+                    }
+
+                    if(ui->view_2->item(j,0)->text() == "Frequency")
+                    {
+
+                        win_frequency->setupUi(ProverkaList3);
+                        ui->tabWidget_2->addTab(ProverkaList3,ui->view_2->item(j,0)->text());
+
+                    }
+
+                    if(ui->view_2->item(j,0)->text() == "TransferCoefficient")
+                    {
+
+                         win_transferCoefficient->setupUi(ProverkaList4);
+                        ui->tabWidget_2->addTab(ProverkaList4,ui->view_2->item(j,0)->text());
+
+                    }
+
+                    if(ui->view_2->item(j,0)->text() == "SwitchingSignalSM")
+                    {
+
+                        win_switchingSignalSM_2->setupUi(ProverkaList5);
+
+                        QSqlQuery sql ;
+
+
+                        sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
+                                         " FROM Proverka"
+                                         " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                              " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                                               " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                                                 " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                                                " AND Proverka.[Имя проверки] = 'SwitchingSignalSM'");
+
+
+
+                        sql = BD->zapros("SELECT DISTINCT GraphPoint.NumberGraph,GraphPoint.Y,GraphPoint.[Вход],GraphPoint.[Выход]"
+                                         " FROM Proverka"
+                                         " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                                         " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
+                                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                              " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                                               " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                                                 " AND GraphPoint.DataProverki = '"+PutData+"'"
+                                                                                                                                                                                                                                                            " AND Result.IdLink = "+sql.value(0).toString()+""
+                                                                                                                                                                                                                                                                                                            " ORDER BY GraphPoint.[IdGraph]");
+
+
+                        win_switchingSignalSM_2->lcdNumber->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSM_2->pushButton_1->setIcon(R3_Red);
+                            win_switchingSignalSM_2->pushButton_1->setIconSize(win_switchingSignalSM_2->pushButton_1->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalSM_2->pushButton_1->setIcon(R2_Green);
+                            win_switchingSignalSM_2->pushButton_1->setIconSize(win_switchingSignalSM_2->pushButton_1->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSM_2->lcdNumber_2->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSM_2->pushButton_2->setIcon(R3_Red);
+                            win_switchingSignalSM_2->pushButton_2->setIconSize(win_switchingSignalSM_2->pushButton_2->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalSM_2->pushButton_2->setIcon(R2_Green);
+                            win_switchingSignalSM_2->pushButton_2->setIconSize(win_switchingSignalSM_2->pushButton_2->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSM_2->lcdNumber_3->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSM_2->pushButton_3->setIcon(R3_Red);
+                            win_switchingSignalSM_2->pushButton_3->setIconSize(win_switchingSignalSM_2->pushButton_3->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalSM_2->pushButton_3->setIcon(R2_Green);
+                            win_switchingSignalSM_2->pushButton_3->setIconSize(win_switchingSignalSM_2->pushButton_3->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSM_2->lcdNumber_4->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSM_2->pushButton_4->setIcon(R3_Red);
+                            win_switchingSignalSM_2->pushButton_4->setIconSize(win_switchingSignalSM_2->pushButton_4->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalSM_2->pushButton_4->setIcon(R2_Green);
+                            win_switchingSignalSM_2->pushButton_4->setIconSize(win_switchingSignalSM_2->pushButton_4->size());
+                        }
+
+
+                        ui->tabWidget_2->addTab(ProverkaList5,ui->view_2->item(j,0)->text());
+
+                    }
+
+                    if(ui->view_2->item(j,0)->text() == "SwitchingSignalDM") //Другое нужно
+                    {
+
+                        win_switchingSignalDM_2->setupUi(ProverkaList5);
+
+                        QSqlQuery sql;
+
+
+                        sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
+                                         " FROM Proverka"
+                                         " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                              " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                                               " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                                                 " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                                                " AND Proverka.[Имя проверки] = 'SwitchingSignalDM'");
+
+
+                        sql = BD->zapros("SELECT DISTINCT GraphPoint.NumberGraph,GraphPoint.Y,GraphPoint.[Вход],GraphPoint.[Выход]"
+                                         " FROM Proverka"
+                                         " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                                         " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
+                                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                              " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                                               " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                                                 " AND GraphPoint.DataProverki = '"+PutData+"'"
+                                                                                                                                                                                                                                                            " AND Result.IdLink = "+sql.value(0).toString()+""
+                                                                                                                                                                                                                                                                                                            " ORDER BY GraphPoint.[IdGraph]");
+
+
+                        win_switchingSignalDM_2->lcdNumber->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalDM_2->pushButton_1->setIcon(R3_Red);
+                            win_switchingSignalDM_2->pushButton_1->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalDM_2->pushButton_1->setIcon(R2_Green);
+                            win_switchingSignalDM_2->pushButton_1->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalDM_2->lcdNumber_2->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalDM_2->pushButton_2->setIcon(R3_Red);
+                            win_switchingSignalDM_2->pushButton_2->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalDM_2->pushButton_2->setIcon(R2_Green);
+                            win_switchingSignalDM_2->pushButton_2->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalDM_2->lcdNumber_3->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalDM_2->pushButton_3->setIcon(R3_Red);
+                            win_switchingSignalDM_2->pushButton_3->setIconSize(win_switchingSignalDM_2->pushButton_3->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalDM_2->pushButton_3->setIcon(R2_Green);
+                            win_switchingSignalDM_2->pushButton_3->setIconSize(win_switchingSignalDM_2->pushButton_3->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalDM_2->lcdNumber_4->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalDM_2->pushButton_4->setIcon(R3_Red);
+                            win_switchingSignalDM_2->pushButton_4->setIconSize(win_switchingSignalDM_2->pushButton_4->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalDM_2->pushButton_4->setIcon(R2_Green);
+                            win_switchingSignalDM_2->pushButton_4->setIconSize(win_switchingSignalDM_2->pushButton_4->size());
+                        }
+
+                        ui->tabWidget_2->addTab(ProverkaList5,ui->view_2->item(j,0)->text());
+
+                    }
+
+                    if(ui->view_2->item(j,0)->text() == "SwitchingSignalSMDM") //Другое нужно
+                    {
+
+                        win_switchingSignalSMDM_2->setupUi(ProverkaList5);
+
+                        QSqlQuery sql;
+
+
+                        sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
+                                         " FROM Proverka"
+                                         " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                              " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                                               " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                                                 " AND Result.Date = '"+PutData+"'"
+                                                                                                                                                                                                                                                " AND Proverka.[Имя проверки] = 'SwitchingSignalSMDM'");
+
+
+
+                        sql = BD->zapros("SELECT DISTINCT GraphPoint.NumberGraph,GraphPoint.Y,GraphPoint.[Вход],GraphPoint.[Выход]"
+                                         " FROM Proverka"
+                                         " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
+                                         " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
+                                         " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
+                                         " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
+                                         " JOIN Result ON Link.IdLink == Result.IdLink"
+                                         " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
+                                         " Where Device.[Название устройства] = '"+PutBlok+"'"
+                                                                                           " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
+                                                                                                                                              " AND Result.[Этап] = '"+PutEtap+"'"
+                                                                                                                                                                               " AND Etap.Etaps = '"+PutProverka+"'"
+                                                                                                                                                                                                                 " AND GraphPoint.DataProverki = '"+PutData+"'"
+                                                                                                                                                                                                                                                            " AND Result.IdLink = "+sql.value(0).toString()+""
+                                                                                                                                                                                                                                                                                                            " ORDER BY GraphPoint.[IdGraph]");
+
+
+
+                        win_switchingSignalSMDM_2->lcdNumber_PRD->display(sql.value(1).toDouble());
+
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRD_1->setIcon(R3_Red);
+                            win_switchingSignalSMDM_2->pushButton_PRD_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_1->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRD_1->setIcon(R2_Green);
+                            win_switchingSignalSMDM_2->pushButton_PRD_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_1->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSMDM_2->lcdNumber_PRD_2->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRD_2->setIcon(R3_Red);
+                            win_switchingSignalSMDM_2->pushButton_PRD_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_2->size());
+
+                        }
+                        else
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRD_2->setIcon(R2_Green);
+                            win_switchingSignalSMDM_2->pushButton_PRD_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_2->size());
+
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSMDM_2->lcdNumber_PRD_3->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRD_3->setIcon(R3_Red);
+                            win_switchingSignalSMDM_2->pushButton_PRD_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_3->size());
+
+                        }
+                        else
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRD_3->setIcon(R2_Green);
+                            win_switchingSignalSMDM_2->pushButton_PRD_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_3->size());
+
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSMDM_2->lcdNumber_PRD_4->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRD_4->setIcon(R3_Red);
+                            win_switchingSignalSMDM_2->pushButton_PRD_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_4->size());
+
+                        }
+                        else
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRD_4->setIcon(R2_Green);
+                            win_switchingSignalSMDM_2->pushButton_PRD_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_4->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSMDM_2->lcdNumber_PRM->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRM_1->setIcon(R3_Red);
+                            win_switchingSignalSMDM_2->pushButton_PRM_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_1->size());
+
+                        }
+                        else
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRM_1->setIcon(R2_Green);
+                            win_switchingSignalSMDM_2->pushButton_PRM_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_1->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSMDM_2->lcdNumber_PRM_2->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+
+                            win_switchingSignalSMDM_2->pushButton_PRM_2->setIcon(R3_Red);
+                            win_switchingSignalSMDM_2->pushButton_PRM_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_2->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRM_2->setIcon(R2_Green);
+                            win_switchingSignalSMDM_2->pushButton_PRM_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_2->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSMDM_2->lcdNumber_PRM_3->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRM_3->setIcon(R3_Red);
+                            win_switchingSignalSMDM_2->pushButton_PRM_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_3->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRM_3->setIcon(R2_Green);
+                            win_switchingSignalSMDM_2->pushButton_PRM_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_3->size());
+                        }
+
+                        sql.next();
+
+                        win_switchingSignalSMDM_2->lcdNumber_PRM_4->display(sql.value(1).toDouble());
+
+                        if(sql.value(1).toDouble() < -20)
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRM_4->setIcon(R3_Red);
+                            win_switchingSignalSMDM_2->pushButton_PRM_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_4->size());
+                        }
+                        else
+                        {
+                            win_switchingSignalSMDM_2->pushButton_PRM_4->setIcon(R2_Green);
+                            win_switchingSignalSMDM_2->pushButton_PRM_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_4->size());
+                        }
+
+
+                        ui->tabWidget_2->addTab(ProverkaList5,ui->view_2->item(j,0)->text());
+
+                    }
+
+                    ui->view_2->item(j,0)->setBackground(QBrush(QColor(158, 207, 207, 20)));
+                }
+
+
             }
-
-            ui->view_2->setItem(j,i,item);
-
-            if(i==0)
-            {
-                ui->view_2->item(j,0)->setCheckState(Qt::Checked);
-
-
-                if(ui->view_2->item(j,0)->text() == "Power")
-                {
-                    win_power_2->setupUi(ProverkaList2);
-
-                    QSqlQuery sql;
-
-                    sql = BD->zapros("SELECT DISTINCT Power.Sootvetstvie,Power.PowerResult,Power.Volt,Power.Tok"
-                              " FROM Proverka"
-                              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                              " JOIN Result ON Link.IdLink == Result.IdLink"
-                              " JOIN Power ON Result.IdLink == Power.IdLink"
-                              " Where Device.[Название устройства] = '"+PutBlok+"'"
-                              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                              " AND Result.[Этап] = '"+PutEtap+"'"
-                              " AND Etap.Etaps = '"+PutProverka+"'"
-                              " AND Power.DataProverki = '"+PutData+"'"
-                              " AND Result.IdLink = "+IdLink+""
-                              " ORDER BY Power.[IdPower]");
-
-
-                    win_power_2->lcdNumber_10V_Bt->display(sql.value(1).toDouble());
-                    win_power_2->lcdNumber_10V_V->display(sql.value(2).toDouble());
-                    win_power_2->lcdNumber_10V_I->display(sql.value(3).toDouble());
-
-                    if(sql.value(0) == "Cоответствует")
-                    {
-                        win_power_2->pushButton_10V->setIcon(R2_Green);
-                        win_power_2->pushButton_10V->setIconSize(win_power_2->pushButton_10V->size());
-                    }
-                    else
-                    {
-                        win_power_2->pushButton_10V->setIcon(R3_Red);
-                        win_power_2->pushButton_10V->setIconSize(win_power_2->pushButton_10V->size());
-                    }
-
-                    sql.next();
-
-                    win_power_2->lcdNumber_32V_Bt->display(sql.value(1).toDouble());
-                    win_power_2->lcdNumber_32V_V->display(sql.value(2).toDouble());
-                    win_power_2->lcdNumber_32V_I->display(sql.value(3).toDouble());
-
-                    if(sql.value(0) == "Cоответствует")
-                    {
-                        win_power_2->pushButton_32V->setIcon(R2_Green);
-                        win_power_2->pushButton_32V->setIconSize(win_power_2->pushButton_32V->size());
-                    }
-                    else
-                    {
-                        win_power_2->pushButton_32V->setIcon(R3_Red);
-                        win_power_2->pushButton_32V->setIconSize(win_power_2->pushButton_32V->size());
-                    }
-
-                    sql.next();
-
-                    win_power_2->lcdNumber_27V_Bt->display(sql.value(1).toDouble());
-                    win_power_2->lcdNumber_27V_V->display(sql.value(2).toDouble());
-                    win_power_2->lcdNumber_27V_I->display(sql.value(3).toDouble());
-
-                    if(sql.value(0) == "Cоответствует")
-                    {
-                        win_power_2->pushButton_27V->setIcon(R2_Green);
-                        win_power_2->pushButton_27V->setIconSize(win_power_2->pushButton_27V->size());
-                    }
-                    else
-                    {
-                        win_power_2->pushButton_27V->setIcon(R3_Red);
-                        win_power_2->pushButton_27V->setIconSize(win_power_2->pushButton_27V->size());
-                    }
-
-
-                    ui->tabWidget_2->addTab(ProverkaList2,ui->view_2->item(j,0)->text());
-
-                }
-
-                if(ui->view_2->item(j,0)->text() == "Frequency")
-                {
-
-                   // win_frequency->setupUi(ProverkaList3);
-
-                    ui->tabWidget_2->addTab(ProverkaList3,ui->view_2->item(j,0)->text());
-
-                }
-
-                if(ui->view_2->item(j,0)->text() == "TransferCoefficient")
-                {
-
-                  //  win_transferCoefficient->setupUi(ProverkaList4);
-
-                    ui->tabWidget_2->addTab(ProverkaList4,ui->view_2->item(j,0)->text());
-
-                }
-
-                if(ui->view_2->item(j,0)->text() == "SwitchingSignalSM")
-                {
-
-                    win_switchingSignalSM_2->setupUi(ProverkaList5);
-
-                    QSqlQuery sql ;
-
-
-                    sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
-                              " FROM Proverka"
-                              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                              " JOIN Result ON Link.IdLink == Result.IdLink"
-                              " Where Device.[Название устройства] = '"+PutBlok+"'"
-                              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                              " AND Result.[Этап] = '"+PutEtap+"'"
-                              " AND Etap.Etaps = '"+PutProverka+"'"
-                              " AND Result.Date = '"+PutData+"'"
-                              " AND Proverka.[Имя проверки] = 'SwitchingSignalSM'");
-
-
-
-                    sql = BD->zapros("SELECT DISTINCT GraphPoint.NumberGraph,GraphPoint.Y,GraphPoint.[Вход],GraphPoint.[Выход]"
-                              " FROM Proverka"
-                              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                              " JOIN Result ON Link.IdLink == Result.IdLink"
-                              " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
-                              " Where Device.[Название устройства] = '"+PutBlok+"'"
-                              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                              " AND Result.[Этап] = '"+PutEtap+"'"
-                              " AND Etap.Etaps = '"+PutProverka+"'"
-                              " AND GraphPoint.DataProverki = '"+PutData+"'"
-                              " AND Result.IdLink = "+sql.value(0).toString()+""
-                              " ORDER BY GraphPoint.[IdGraph]");
-
-
-                    win_switchingSignalSM_2->lcdNumber->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSM_2->pushButton_1->setIcon(R3_Red);
-                        win_switchingSignalSM_2->pushButton_1->setIconSize(win_switchingSignalSM_2->pushButton_1->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalSM_2->pushButton_1->setIcon(R2_Green);
-                        win_switchingSignalSM_2->pushButton_1->setIconSize(win_switchingSignalSM_2->pushButton_1->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSM_2->lcdNumber_2->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSM_2->pushButton_2->setIcon(R3_Red);
-                        win_switchingSignalSM_2->pushButton_2->setIconSize(win_switchingSignalSM_2->pushButton_2->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalSM_2->pushButton_2->setIcon(R2_Green);
-                        win_switchingSignalSM_2->pushButton_2->setIconSize(win_switchingSignalSM_2->pushButton_2->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSM_2->lcdNumber_3->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSM_2->pushButton_3->setIcon(R3_Red);
-                        win_switchingSignalSM_2->pushButton_3->setIconSize(win_switchingSignalSM_2->pushButton_3->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalSM_2->pushButton_3->setIcon(R2_Green);
-                        win_switchingSignalSM_2->pushButton_3->setIconSize(win_switchingSignalSM_2->pushButton_3->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSM_2->lcdNumber_4->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSM_2->pushButton_4->setIcon(R3_Red);
-                        win_switchingSignalSM_2->pushButton_4->setIconSize(win_switchingSignalSM_2->pushButton_4->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalSM_2->pushButton_4->setIcon(R2_Green);
-                        win_switchingSignalSM_2->pushButton_4->setIconSize(win_switchingSignalSM_2->pushButton_4->size());
-                    }
-
-
-                    ui->tabWidget_2->addTab(ProverkaList5,ui->view_2->item(j,0)->text());
-
-                }
-
-                if(ui->view_2->item(j,0)->text() == "SwitchingSignalDM") //Другое нужно
-                {
-
-                    win_switchingSignalDM_2->setupUi(ProverkaList5);
-
-                    QSqlQuery sql;
-
-
-                    sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
-                              " FROM Proverka"
-                              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                              " JOIN Result ON Link.IdLink == Result.IdLink"
-                              " Where Device.[Название устройства] = '"+PutBlok+"'"
-                              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                              " AND Result.[Этап] = '"+PutEtap+"'"
-                              " AND Etap.Etaps = '"+PutProverka+"'"
-                              " AND Result.Date = '"+PutData+"'"
-                              " AND Proverka.[Имя проверки] = 'SwitchingSignalDM'");
-
-
-                    sql = BD->zapros("SELECT DISTINCT GraphPoint.NumberGraph,GraphPoint.Y,GraphPoint.[Вход],GraphPoint.[Выход]"
-                              " FROM Proverka"
-                              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                              " JOIN Result ON Link.IdLink == Result.IdLink"
-                              " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
-                              " Where Device.[Название устройства] = '"+PutBlok+"'"
-                              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                              " AND Result.[Этап] = '"+PutEtap+"'"
-                              " AND Etap.Etaps = '"+PutProverka+"'"
-                              " AND GraphPoint.DataProverki = '"+PutData+"'"
-                              " AND Result.IdLink = "+sql.value(0).toString()+""
-                              " ORDER BY GraphPoint.[IdGraph]");
-
-
-                    win_switchingSignalDM_2->lcdNumber->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalDM_2->pushButton_1->setIcon(R3_Red);
-                        win_switchingSignalDM_2->pushButton_1->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalDM_2->pushButton_1->setIcon(R2_Green);
-                        win_switchingSignalDM_2->pushButton_1->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalDM_2->lcdNumber_2->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalDM_2->pushButton_2->setIcon(R3_Red);
-                        win_switchingSignalDM_2->pushButton_2->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalDM_2->pushButton_2->setIcon(R2_Green);
-                        win_switchingSignalDM_2->pushButton_2->setIconSize(win_switchingSignalDM_2->pushButton_1->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalDM_2->lcdNumber_3->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalDM_2->pushButton_3->setIcon(R3_Red);
-                        win_switchingSignalDM_2->pushButton_3->setIconSize(win_switchingSignalDM_2->pushButton_3->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalDM_2->pushButton_3->setIcon(R2_Green);
-                        win_switchingSignalDM_2->pushButton_3->setIconSize(win_switchingSignalDM_2->pushButton_3->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalDM_2->lcdNumber_4->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalDM_2->pushButton_4->setIcon(R3_Red);
-                        win_switchingSignalDM_2->pushButton_4->setIconSize(win_switchingSignalDM_2->pushButton_4->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalDM_2->pushButton_4->setIcon(R2_Green);
-                        win_switchingSignalDM_2->pushButton_4->setIconSize(win_switchingSignalDM_2->pushButton_4->size());
-                    }
-
-                    ui->tabWidget_2->addTab(ProverkaList5,ui->view_2->item(j,0)->text());
-
-                }
-
-                if(ui->view_2->item(j,0)->text() == "SwitchingSignalSMDM") //Другое нужно
-                {
-
-                    win_switchingSignalSMDM_2->setupUi(ProverkaList5);
-
-                    QSqlQuery sql;
-
-
-                    sql = BD->zapros("SELECT Result.IdLink, [Имя проверки]"
-                              " FROM Proverka"
-                              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                              " JOIN Result ON Link.IdLink == Result.IdLink"
-                              " Where Device.[Название устройства] = '"+PutBlok+"'"
-                              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                              " AND Result.[Этап] = '"+PutEtap+"'"
-                              " AND Etap.Etaps = '"+PutProverka+"'"
-                              " AND Result.Date = '"+PutData+"'"
-                              " AND Proverka.[Имя проверки] = 'SwitchingSignalSMDM'");
-
-
-
-                    sql = BD->zapros("SELECT DISTINCT GraphPoint.NumberGraph,GraphPoint.Y,GraphPoint.[Вход],GraphPoint.[Выход]"
-                              " FROM Proverka"
-                              " JOIN Device ON Device.IdDevice=DeviceSerial.IdDevice"
-                              " JOIN DeviceSerial ON Link.IdDevice == DeviceSerial.IdSerial"
-                              " JOIN LInk ON Link.IdEtap == Etap.IdEtap"
-                              " JOIN Etap ON Link.IdProverka == Proverka.IdProverka"
-                              " JOIN Result ON Link.IdLink == Result.IdLink"
-                              " JOIN GraphPoint ON Result.IdLink == GraphPoint.IdResult"
-                              " Where Device.[Название устройства] = '"+PutBlok+"'"
-                              " AND DeviceSerial.[Серийный номер] = '"+PutSerial+"'"
-                              " AND Result.[Этап] = '"+PutEtap+"'"
-                              " AND Etap.Etaps = '"+PutProverka+"'"
-                              " AND GraphPoint.DataProverki = '"+PutData+"'"
-                              " AND Result.IdLink = "+sql.value(0).toString()+""
-                              " ORDER BY GraphPoint.[IdGraph]");
-
-
-
-                    win_switchingSignalSMDM_2->lcdNumber_PRD->display(sql.value(1).toDouble());
-
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRD_1->setIcon(R3_Red);
-                        win_switchingSignalSMDM_2->pushButton_PRD_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_1->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRD_1->setIcon(R2_Green);
-                        win_switchingSignalSMDM_2->pushButton_PRD_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_1->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSMDM_2->lcdNumber_PRD_2->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRD_2->setIcon(R3_Red);
-                        win_switchingSignalSMDM_2->pushButton_PRD_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_2->size());
-
-                    }
-                    else
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRD_2->setIcon(R2_Green);
-                        win_switchingSignalSMDM_2->pushButton_PRD_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_2->size());
-
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSMDM_2->lcdNumber_PRD_3->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRD_3->setIcon(R3_Red);
-                        win_switchingSignalSMDM_2->pushButton_PRD_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_3->size());
-
-                    }
-                    else
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRD_3->setIcon(R2_Green);
-                        win_switchingSignalSMDM_2->pushButton_PRD_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_3->size());
-
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSMDM_2->lcdNumber_PRD_4->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRD_4->setIcon(R3_Red);
-                        win_switchingSignalSMDM_2->pushButton_PRD_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_4->size());
-
-                    }
-                    else
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRD_4->setIcon(R2_Green);
-                        win_switchingSignalSMDM_2->pushButton_PRD_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRD_4->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSMDM_2->lcdNumber_PRM->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRM_1->setIcon(R3_Red);
-                        win_switchingSignalSMDM_2->pushButton_PRM_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_1->size());
-
-                    }
-                    else
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRM_1->setIcon(R2_Green);
-                        win_switchingSignalSMDM_2->pushButton_PRM_1->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_1->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSMDM_2->lcdNumber_PRM_2->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-
-                        win_switchingSignalSMDM_2->pushButton_PRM_2->setIcon(R3_Red);
-                        win_switchingSignalSMDM_2->pushButton_PRM_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_2->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRM_2->setIcon(R2_Green);
-                        win_switchingSignalSMDM_2->pushButton_PRM_2->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_2->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSMDM_2->lcdNumber_PRM_3->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRM_3->setIcon(R3_Red);
-                        win_switchingSignalSMDM_2->pushButton_PRM_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_3->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRM_3->setIcon(R2_Green);
-                        win_switchingSignalSMDM_2->pushButton_PRM_3->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_3->size());
-                    }
-
-                    sql.next();
-
-                    win_switchingSignalSMDM_2->lcdNumber_PRM_4->display(sql.value(1).toDouble());
-
-                    if(sql.value(1).toDouble() < -20)
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRM_4->setIcon(R3_Red);
-                        win_switchingSignalSMDM_2->pushButton_PRM_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_4->size());
-                    }
-                    else
-                    {
-                        win_switchingSignalSMDM_2->pushButton_PRM_4->setIcon(R2_Green);
-                        win_switchingSignalSMDM_2->pushButton_PRM_4->setIconSize(win_switchingSignalSMDM_2->pushButton_PRM_4->size());
-                    }
-
-
-                    ui->tabWidget_2->addTab(ProverkaList5,ui->view_2->item(j,0)->text());
-
-                }
-
-                ui->view_2->item(j,0)->setBackground(QBrush(QColor(158, 207, 207, 20)));
-            }
-
-
         }
+
+        ui->view_2->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        ui->view_2->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     }
-
-    ui->view_2->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->view_2->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-      }
 
 }
 
@@ -1488,7 +1487,7 @@ void MainWindow::ClickCheckBoxGraf_winReuslt(int r,int c)
             point =  PoiskGraph_2(r,c);
 
             win_frequency->ProverkaGraph->xAxis->setRange(ListX[point-1].first()-50,ListX[point-1].last()+50);
-             win_frequency->ProverkaGraph->yAxis->setRange(-10,2);
+            win_frequency->ProverkaGraph->yAxis->setRange(-10,2);
 
 
             win_frequency->ProverkaGraph->graph(point)->setData(ListX[point-1],ListY[point-1]);
@@ -1529,45 +1528,45 @@ int PoiskX1(double y,QVector<double> list_y,QVector<double> list_x)
 void MainWindow::SetMinMaxGraphResult(double min,double max, double Neravnomernost,QVector<double> x,QVector<double> y)
 {
     //Min
-   win_frequency->ProverkaGraph->clearItems();
-   textLabel_Min = new QCPItemText(win_frequency->ProverkaGraph);
-   win_frequency->ProverkaGraph->addItem(textLabel_Min);
-   arrow_Min = new QCPItemLine(win_frequency->ProverkaGraph);
-   win_frequency->ProverkaGraph->addItem(arrow_Min);
-   textLabel_Min->setPositionAlignment(Qt::AlignTop|Qt::AlignCenter);
-   textLabel_Min->position->setCoords(1800,1);
-   arrow_Min->start->setParentAnchor(textLabel_Min->bottom);
-   textLabel_Min->position->setType(QCPItemPosition::ptAxisRectRatio);
-   textLabel_Min->setText("Min: "+QString::number(min)+" дБ");
-   textLabel_Min->setFont(QFont(font().family(),10));
-   textLabel_Min->setPen(QPen(Qt::black));
-   arrow_Min->end->setCoords(PoiskX1(min,y,x),min);
-   arrow_Min->setHead(QCPLineEnding::esSpikeArrow);
+    win_frequency->ProverkaGraph->clearItems();
+    textLabel_Min = new QCPItemText(win_frequency->ProverkaGraph);
+    win_frequency->ProverkaGraph->addItem(textLabel_Min);
+    arrow_Min = new QCPItemLine(win_frequency->ProverkaGraph);
+    win_frequency->ProverkaGraph->addItem(arrow_Min);
+    textLabel_Min->setPositionAlignment(Qt::AlignTop|Qt::AlignCenter);
+    textLabel_Min->position->setCoords(1800,1);
+    arrow_Min->start->setParentAnchor(textLabel_Min->bottom);
+    textLabel_Min->position->setType(QCPItemPosition::ptAxisRectRatio);
+    textLabel_Min->setText("Min: "+QString::number(min)+" дБ");
+    textLabel_Min->setFont(QFont(font().family(),10));
+    textLabel_Min->setPen(QPen(Qt::black));
+    arrow_Min->end->setCoords(PoiskX1(min,y,x),min);
+    arrow_Min->setHead(QCPLineEnding::esSpikeArrow);
 
     //Мах
-   textLabel = new QCPItemText(win_frequency->ProverkaGraph);
-   win_frequency->ProverkaGraph->addItem(textLabel);
-   arrow = new QCPItemLine(win_frequency->ProverkaGraph);
-   win_frequency->ProverkaGraph->addItem(arrow);
-   textLabel->setPositionAlignment(Qt::AlignTop|Qt::AlignCenter);
-   textLabel->position->setCoords(1300,1);
-   arrow->start->setParentAnchor(textLabel->bottom);
-   textLabel->position->setType(QCPItemPosition::ptAxisRectRatio);
-   textLabel->setText("Max: "+QString::number(max)+" дБ");
-   textLabel->setFont(QFont(font().family(),10));
-   textLabel->setPen(QPen(Qt::black));
-   arrow->end->setCoords(PoiskX1(max,y,x),max);
-   arrow->setHead(QCPLineEnding::esSpikeArrow);
+    textLabel = new QCPItemText(win_frequency->ProverkaGraph);
+    win_frequency->ProverkaGraph->addItem(textLabel);
+    arrow = new QCPItemLine(win_frequency->ProverkaGraph);
+    win_frequency->ProverkaGraph->addItem(arrow);
+    textLabel->setPositionAlignment(Qt::AlignTop|Qt::AlignCenter);
+    textLabel->position->setCoords(1300,1);
+    arrow->start->setParentAnchor(textLabel->bottom);
+    textLabel->position->setType(QCPItemPosition::ptAxisRectRatio);
+    textLabel->setText("Max: "+QString::number(max)+" дБ");
+    textLabel->setFont(QFont(font().family(),10));
+    textLabel->setPen(QPen(Qt::black));
+    arrow->end->setCoords(PoiskX1(max,y,x),max);
+    arrow->setHead(QCPLineEnding::esSpikeArrow);
 
     //Неравномерность
-   textLabel_Neravnomernost = new QCPItemText(win_frequency->ProverkaGraph);
-   win_frequency->ProverkaGraph->addItem(textLabel_Neravnomernost);
-   textLabel_Neravnomernost->setPositionAlignment(Qt::AlignTop|Qt::AlignCenter);
-   textLabel_Neravnomernost->position->setCoords(1500,1.5);
-   textLabel_Neravnomernost->position->setType(QCPItemPosition::ptAxisRectRatio);
-   textLabel_Neravnomernost->setText("Неравномерность: "+QString::number(Neravnomernost)+" дБ");
-   textLabel_Neravnomernost->setFont(QFont(font().family(),10));
-   textLabel_Neravnomernost->setPen(QPen(Qt::black));
+    textLabel_Neravnomernost = new QCPItemText(win_frequency->ProverkaGraph);
+    win_frequency->ProverkaGraph->addItem(textLabel_Neravnomernost);
+    textLabel_Neravnomernost->setPositionAlignment(Qt::AlignTop|Qt::AlignCenter);
+    textLabel_Neravnomernost->position->setCoords(1500,1.5);
+    textLabel_Neravnomernost->position->setType(QCPItemPosition::ptAxisRectRatio);
+    textLabel_Neravnomernost->setText("Неравномерность: "+QString::number(Neravnomernost)+" дБ");
+    textLabel_Neravnomernost->setFont(QFont(font().family(),10));
+    textLabel_Neravnomernost->setPen(QPen(Qt::black));
 
 }
 

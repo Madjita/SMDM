@@ -111,19 +111,7 @@ TP_SMDM::~TP_SMDM()
 void TP_SMDM::SetTp()
 {
 
-    udpsocket1->close();
-    udpsocket65400->close();
-    udpsocket65401->close();
-    udpsocket65500->close();
-    udpsocket65510->close();
-    udpsocket65511->close();
-    udpsocket65521->close();
-    udpsocket65523->close();
-    udpsocket65526->close();
-    udpsocket65531->close();
-    udpsocket65533->close();
-
-    p_udpSocketOut->close(); // UDP soket для Переключения каналов реле Коммутатора СМ16-4
+   process_start();
 }
 
 void TP_SMDM::Connect()
@@ -399,7 +387,7 @@ bool TP_SMDM::ReleA(int A)
     }
     else
     {
-       return false;
+       return flag;
     }
 
 }
@@ -643,12 +631,14 @@ bool TP_SMDM::ReleB(char a[10], int rele)
 bool TP_SMDM::readDatagramK1()
 {
     bool flag = false;
-    this->thread()->msleep(200);
+    QByteArray datagram;
+    this->thread()->msleep(250);
+
 
     while(udpsocket1->hasPendingDatagrams())
     {
-        QByteArray datagram;
-        datagram.resize(udpsocket1->pendingDatagramSize());
+
+        datagram.resize(static_cast<int>(udpsocket1->pendingDatagramSize()));
         QHostAddress sender;
         quint16 senderPort;
         udpsocket1->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
@@ -658,26 +648,35 @@ bool TP_SMDM::readDatagramK1()
         flag = true;
     }
 
+    qDebug() << flag<< " : readDatagramK1 = "<< datagram;
+
     return flag;
 }
 
 bool TP_SMDM::readDatagramK2()
 {
     bool flag = false;
-    this->thread()->msleep(200);
+    QByteArray datagram;
+    this->thread()->msleep(250);
+
 
     while(udpsocket3->hasPendingDatagrams())
     {
-        QByteArray datagram;
-        datagram.resize(udpsocket3->pendingDatagramSize());
+
+        datagram.resize(static_cast<int>(udpsocket3->pendingDatagramSize()));
         QHostAddress sender;
         quint16 senderPort;
         udpsocket3->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
 
 
         emit SetImage2(datagram);
+
+
+
         flag = true;
     }
+
+    qDebug() << flag<< " : readDatagramK2 = "<< datagram;
 
     return flag;
 }
@@ -685,20 +684,26 @@ bool TP_SMDM::readDatagramK2()
 bool TP_SMDM::readDatagramK3()
 {
     bool flag = false;
-    this->thread()->msleep(200);
+    QByteArray datagram;
+    this->thread()->msleep(250);
 
     while(udpsocket4->hasPendingDatagrams())
     {
-        QByteArray datagram;
-        datagram.resize(udpsocket4->pendingDatagramSize());
+
+        datagram.resize(static_cast<int>(udpsocket4->pendingDatagramSize()));
         QHostAddress sender;
         quint16 senderPort;
         udpsocket4->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
 
 
         emit  SetImage3(datagram);
+
+
+
         flag = true;
     }
+
+    qDebug() << flag<< " : readDatagramK3 = "<< datagram;
 
     return flag;
 }
@@ -706,11 +711,13 @@ bool TP_SMDM::readDatagramK3()
 bool TP_SMDM::readDatagramK4()
 {
     bool flag = false;
-    this->thread()->msleep(200);
+    QByteArray datagram;
+    this->thread()->msleep(250);
+
     while(udpsocket7->hasPendingDatagrams())
     {
-        QByteArray datagram;
-        datagram.resize(udpsocket7->pendingDatagramSize());
+
+        datagram.resize(static_cast<int>(udpsocket7->pendingDatagramSize()));
         QHostAddress sender;
         quint16 senderPort;
         udpsocket7->readDatagram(datagram.data(),datagram.size(),&sender,&senderPort);
@@ -720,6 +727,8 @@ bool TP_SMDM::readDatagramK4()
 
         flag = true;
     }
+
+    qDebug() << flag<< " : readDatagramK4 = "<< datagram;
 
     return flag;
 }

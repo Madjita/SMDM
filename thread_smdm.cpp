@@ -7,6 +7,7 @@
 
 #define KF_l 19.5
 #define KF_U 21.5
+#define ACHH 4
 
 thread_SMDM::thread_SMDM()
 {
@@ -22,13 +23,9 @@ thread_SMDM::thread_SMDM(Micran_Gen*  Micran1Get,N9000A*   N9000Get,PowerSourse*
 {
 
     Micran1 = Micran1Get;
-
     N9000 = N9000Get;
-
     HMP2020 = HMP2020Get;
-
     TP = TP_SMDMGet;
-
     view = viewGet;
 
 
@@ -55,33 +52,13 @@ void thread_SMDM::SetEtap(QString etapGet)
 
 bool thread_SMDM::writePort()
 {
-    count_replayMessage++;
 
     p_udpSocketOut->writeDatagram(a,50,QHostAddress("192.168.1.233"),30020);
 
     bool ok = false;
     ok = readDatagram_p_udpSocketOut();
 
-    if(ok)
-    {
-        count_replayMessage =0;
-        return ok;
-    }
-    else
-    {
-        //Если не пришел ответ.
-        qDebug() << "ERROR OTVET SMDM";
-
-        if(count_replayMessage > 2)
-        {
-             count_replayMessage =0;
-             return false;
-        }
-        else
-        {
-            writePort();
-        }
-    }
+    return ok;
 
 }
 
@@ -939,7 +916,7 @@ void thread_SMDM::StartProverka4()
 
 bool thread_SMDM::readDatagram_p_udpSocketOut()
 {
-    bool flag = false;
+     bool flag = false;
     this->thread()->msleep(250);
 
     while(p_udpSocketOut->hasPendingDatagrams())
@@ -952,8 +929,13 @@ bool thread_SMDM::readDatagram_p_udpSocketOut()
 
 
         qDebug() << "GET UDP Poket :" <<datagram;
-
         flag = true;
+
+        if(datagram[7] == static_cast<char>(0x03))
+        {
+            qDebug() << "ERROR KS UDP Poket";
+            flag = false;
+        }
     }
 
     if(flag == false)
@@ -1264,7 +1246,7 @@ void thread_SMDM::AchH()
 
     }
 
-    if(NeravnACHX >4)
+    if(NeravnACHX > ACHH)
     {
         // qDebug()<< "Ошибка! Неравномерность АЧХ "<<NeravnACHX<<" > 2";
 
@@ -1296,7 +1278,7 @@ void thread_SMDM::AchH()
             point++;
             if(ListX.count()==point)
             {
-                if(NeravnACHX >4)
+                if(NeravnACHX > ACHH)
                 {
                     win_frequency->tableWidgetAChH->item(j,i)->setBackground(QBrush(Qt::red));
 
@@ -1595,7 +1577,7 @@ void thread_SMDM::Proverka_5(int KoefPeredachi)
 
 
 
-    if(y1.count() < 20)
+    if(y1.count() < 21)
     {
         return ;
     }

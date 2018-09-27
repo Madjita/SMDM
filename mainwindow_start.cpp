@@ -104,48 +104,47 @@ void MainWindow::Proverka_Start()
         threadSM->Set_log_text(log_text);
 
 
+        delete threadSM;
+
+        threadSM = new thread_SM(Micran1,N9000,HMP2020,TP,ui->view);
+
+        threadSM->setListRegyl(ListRegyl);
+
+        connect(this,&MainWindow::startSM,threadSM,&thread_SM::Work);
+
+        connect(threadSM,&thread_SM::addBDZapros,this,&MainWindow::addBD);
+
+        threadSM->SetUi(win_power,win_frequency,win_transferCoefficient,win_switchingSignalSM);
 
 
-       // connect(this,&MainWindow::startSM,threadSM,&thread_SM::Work);
+        connect(threadSM, &thread_SM::updateGraph, this, &MainWindow::UpdateGraph);
+        connect(threadSM, &thread_SM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
 
 
-      //  threadSM->SetUi(win_power,win_frequency,win_transferCoefficient,win_switchingSignalSM);
+        connect(threadSM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
+
+        connect(threadSM,&thread_SM::end, this, &MainWindow::END);
+
+        connect(threadSM,&thread_SM::Log,this,&MainWindow::log_wr_message_Block);
+        connect(threadSM,&thread_SM::Log2,this,&MainWindow::log_wr_message_Block);
+
+        connect(threadSM,&thread_SM::StartFrequency,ui->tabWidget,&QTabWidget::setCurrentIndex);
+        connect(threadSM,&thread_SM::StartPower,ui->tabWidget,&QTabWidget::setCurrentIndex);
+        connect(threadSM,&thread_SM::StartPerestroyka,ui->tabWidget,&QTabWidget::setCurrentIndex);
 
 
-//        connect(threadSM, &thread_SM::updateGraph, this, &MainWindow::UpdateGraph);
+        connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
+        connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
+        connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
+        connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
+
+        connect(threadSM,&thread_SM::LogClear,this,&MainWindow::log_wr_message_Block_claer);
+        connect(threadSM,&thread_SM::CreateGraph,this,&MainWindow::CreateGraph2);
+        connect(threadSM,&thread_SM::CreateGraphfrenq,this,&MainWindow::CreateGraphFrenq,Qt::QueuedConnection);
 
 
-//         connect(threadSM, &thread_SM::updateGraphPerestrouyka, this, &MainWindow::UpdateGraphPerestrouyka);
-
-
-
-//        connect(threadSM,SIGNAL(SetDataStart(QDateTime)), newLog, SLOT(SetDataStart(QDateTime)));
-
-//        connect(threadSM,&thread_SM::end, this, &MainWindow::END);
-
-//        connect(threadSM,&thread_SM::Log,this,&MainWindow::log_wr_message_Block);
-//        connect(threadSM,&thread_SM::Log2,this,&MainWindow::log_wr_message_Block);
-
-//        connect(threadSM,&thread_SM::StartFrequency,ui->tabWidget,&QTabWidget::setCurrentIndex);
-//        connect(threadSM,&thread_SM::StartPower,ui->tabWidget,&QTabWidget::setCurrentIndex);
-//        connect(threadSM,&thread_SM::StartPerestroyka,ui->tabWidget,&QTabWidget::setCurrentIndex);
-
-
-
-//        connect(TP,&TP_SMDM::SetImage,this,&MainWindow::SetImage);
-//        connect(TP,&TP_SMDM::SetImage2,this,&MainWindow::SetImage2);
-//        connect(TP,&TP_SMDM::SetImage3,this,&MainWindow::SetImage3);
-//        connect(TP,&TP_SMDM::SetImage4,this,&MainWindow::SetImage4);
-
-//        connect(threadSM,&thread_SM::LogClear,this,&MainWindow::log_wr_message_Block_claer);
-
-//        connect(threadSM,&thread_SM::CreateGraph,this,&MainWindow::CreateGraph2);
-
-//        connect(threadSM,&thread_SM::CreateGraphfrenq,this,&MainWindow::CreateGraphFrenq,Qt::QueuedConnection);
-
-
-
-//        connect(ui->view,SIGNAL(cellClicked(int,int)),threadSM,SLOT(SetProv(int,int)));
+        connect(threadSM->win_transferCoefficient->tableWidgetPerestrouka,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafPerestrouka(int,int)));
+        connect(threadSM->win_frequency->tableWidgetAChH,SIGNAL(cellClicked(int,int)),this,SLOT(ClickCheckBoxGrafAChH(int,int)));
 
         threadSM->SetIdLink(SQL_FindIdLink);
 
@@ -190,11 +189,6 @@ void MainWindow::Proverka_Start()
                 }
             }
         }
-
-        //timer->start(fps);
-
-
-
 
 
        emit startSM();
@@ -329,13 +323,9 @@ void MainWindow::Proverka_Start()
 
             threadSMDM->setListRegyl(ListRegyl);
 
-            //threadSMDM->moveToThread(new QThread());
-
-            //(threadSMDM->thread(),&QThread::started,threadSMDM,&thread_SMDM::Work);
 
             connect(this,&MainWindow::work_threadSMDM,threadSMDM,&thread_SMDM::Work);
 
-            //connect(potok3,SIGNAL(started()),threadSMDM,SLOT(Work()));
 
             connect(threadSMDM,&thread_SMDM::end, this, &MainWindow::END);
 
@@ -410,12 +400,7 @@ void MainWindow::Proverka_Start()
                 }
             }
 
-            //timer->start(fps);
-
-
             emit work_threadSMDM();
-
-          //  threadSMDM->thread()->start();
 
             DisebleElements();
 
